@@ -3,6 +3,8 @@ package com.monopoly_deal.v1.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.monopoly_deal.v1.enums.PropertyColor;
+
 public class PropertySet {
     private PropertyColor color;
     private List<PropertyCard> cards = new ArrayList<>();

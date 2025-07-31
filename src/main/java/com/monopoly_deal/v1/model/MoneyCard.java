@@ -1,5 +1,7 @@
 package com.monopoly_deal.v1.model;
 
+import com.monopoly_deal.v1.enums.CardType;
+
 public class MoneyCard extends Card {
     
 

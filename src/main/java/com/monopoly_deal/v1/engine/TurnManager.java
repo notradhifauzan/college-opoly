@@ -1,6 +1,6 @@
 package com.monopoly_deal.v1.engine;
 
-import com.monopoly_deal.v1.model.GamePhase;
+import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.model.Player;
 
 public class TurnManager {

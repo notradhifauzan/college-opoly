@@ -1,5 +1,8 @@
 package com.monopoly_deal.v1.model;
 
+import com.monopoly_deal.v1.enums.CardType;
+import com.monopoly_deal.v1.enums.PropertyColor;
+
 public class PropertyCard extends Card {
     private PropertyColor color;
 

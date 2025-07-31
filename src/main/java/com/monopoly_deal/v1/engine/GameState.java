@@ -2,6 +2,7 @@ package com.monopoly_deal.v1.engine;
 
 import java.util.List;
 
+import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.model.*;
 
 public class GameState {
