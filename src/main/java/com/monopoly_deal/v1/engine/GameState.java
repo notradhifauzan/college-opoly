@@ -1,6 +1,7 @@
 package com.monopoly_deal.v1.engine;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.model.*;
@@ -33,5 +34,12 @@ public class GameState {
 
     public void advanceToNextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    }
+
+    public Player getPlayerByName(String name) {
+        return players.stream()
+                    .filter(p -> p.getName().equals(name))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("Player not found"));
     }
 }

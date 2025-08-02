@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.monopoly_deal.v1.enums.PropertyColor;
 
+import lombok.Data;
+
+@Data
 public class PropertySet {
     private PropertyColor color;
     private List<PropertyCard> cards = new ArrayList<>();
@@ -18,20 +21,4 @@ public class PropertySet {
     public void addCard(PropertyCard card) {
         cards.add(card);
     }
-
-    // getter setter
-    public PropertyColor getColor() {
-        return color;
-    }
-    public void setColor(PropertyColor color) {
-        this.color = color;
-    }
-    public List<PropertyCard> getCards() {
-        return cards;
-    }
-    public void setCards(List<PropertyCard> cards) {
-        this.cards = cards;
-    }
-
-    
 }
