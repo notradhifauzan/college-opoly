@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import lombok.Data;
+
+@Data
 public class Player {
     private String id;
     private String name;
@@ -45,47 +48,5 @@ public class Player {
         PropertySet newSet = new PropertySet(card.getColor());
         newSet.addCard(card);
         propertySets.add(newSet);
-    }
-
-    
-    // getter setter
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    public void setHand(List<Card> hand) {
-        this.hand = hand;
-    }
-
-    public List<Card> getBank() {
-        return bank;
-    }
-
-    public void setBank(List<Card> bank) {
-        this.bank = bank;
-    }
-
-    public List<PropertySet> getPropertySets() {
-        return propertySets;
-    }
-
-    public void setPropertySets(List<PropertySet> propertySets) {
-        this.propertySets = propertySets;
     }
 }

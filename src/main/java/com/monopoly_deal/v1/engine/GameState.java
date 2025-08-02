@@ -5,6 +5,9 @@ import java.util.List;
 import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.model.*;
 
+import lombok.Data;
+
+@Data
 public class GameState {
     private List<Player> players;
     private int currentPlayerIndex;
@@ -31,44 +34,4 @@ public class GameState {
     public void advanceToNextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
-
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-    public int getCurrentPlayerIndex() {
-        return currentPlayerIndex;
-    }
-    public void setCurrentPlayerIndex(int currentPlayerIndex) {
-        this.currentPlayerIndex = currentPlayerIndex;
-    }
-    public Deck getDeck() {
-        return deck;
-    }
-    public void setDeck(Deck deck) {
-        this.deck = deck;
-    }
-    public DiscardPile getDiscardPile() {
-        return discardPile;
-    }
-    public void setDiscardPile(DiscardPile discardPile) {
-        this.discardPile = discardPile;
-    }
-    public GamePhase getCurrentPhase() {
-        return currentPhase;
-    }
-    public void setCurrentPhase(GamePhase currentPhase) {
-        this.currentPhase = currentPhase;
-    }
-    public boolean isGameOver() {
-        return gameOver;
-    }
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
-    
 }

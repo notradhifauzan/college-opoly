@@ -3,7 +3,6 @@ package com.monopoly_deal.v1.model;
 import com.monopoly_deal.v1.enums.CardType;
 
 public class MoneyCard extends Card {
-    
 
     public MoneyCard(String id, int value) {
         this.id = id;

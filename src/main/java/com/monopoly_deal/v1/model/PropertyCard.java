@@ -3,6 +3,11 @@ package com.monopoly_deal.v1.model;
 import com.monopoly_deal.v1.enums.CardType;
 import com.monopoly_deal.v1.enums.PropertyColor;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper=false)
 public class PropertyCard extends Card {
     private PropertyColor color;
 
@@ -12,13 +17,5 @@ public class PropertyCard extends Card {
         this.value = value;
         this.color = color;
         this.cardType = CardType.PROPERTY;
-    }
-
-    public PropertyColor getColor() {
-        return color;
-    }
-
-    public void setColor(PropertyColor color) {
-        this.color = color;
     }
 }
