@@ -1,9 +1,9 @@
-
 ```
 v1
 ├─ .mvn
 │  └─ wrapper
 │     └─ maven-wrapper.properties
+├─ class-diagram.drawio
 ├─ mvnw
 ├─ mvnw.cmd
 ├─ pom.xml
@@ -33,10 +33,16 @@ v1
    │  │           │  └─ RentCard.java
    │  │           ├─ service
    │  │           │  ├─ CardActionService.java
+   │  │           │  ├─ GameService.java
    │  │           │  └─ GameUtils.java
    │  │           └─ V1Application.java
    │  └─ resources
    │     ├─ application.properties
+   │     ├─ cards
+   │     │  ├─ action-card.json
+   │     │  ├─ money-card.json
+   │     │  ├─ property-card.json
+   │     │  └─ wild-card.json
    │     ├─ static
    │     └─ templates
    └─ test
