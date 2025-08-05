@@ -1,0 +1,30 @@
+[
+    {
+        "id": "prop-001",
+        "name": "Boardwalk",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-002",
+        "name": "Boardwalk2",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-003",
+        "name": "Boardwalk3",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-004",
+        "name": "Boardwalk4",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    }
+]
