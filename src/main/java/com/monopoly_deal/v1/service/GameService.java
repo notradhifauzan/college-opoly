@@ -10,6 +10,7 @@ import com.monopoly_deal.v1.engine.TurnManager;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
+import com.monopoly_deal.v1.utils.CardLoader;
 
 @Service
 public class GameService {
@@ -30,6 +31,7 @@ public class GameService {
      */
     public void startGame(List<Player> players, Deck deck) {
         gameState = new GameState(players, deck);
+        gameEngine.startGame(gameState);
     }
 
     // draw cards at the start of a player's turn
