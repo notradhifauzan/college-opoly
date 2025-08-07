@@ -15,6 +15,8 @@ public class CardLoader {
     public static List<Card> loadAllCards() {
         List<Card> allCards = new ArrayList<>();
 
+        allCards.addAll(loadPropertyCards());
+
         return allCards;
     }
 
