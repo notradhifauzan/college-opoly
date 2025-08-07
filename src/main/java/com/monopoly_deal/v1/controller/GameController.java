@@ -2,6 +2,7 @@ package com.monopoly_deal.v1.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.catalina.connector.Response;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.service.GameService;
@@ -50,5 +52,48 @@ public class GameController {
     public ResponseEntity<String> drawCards() {
         gameService.drawCardsForCurrentPlayer();
         return ResponseEntity.ok("Cards drawn successfully.");
+    }
+
+    @PostMapping("/play-card")
+    public ResponseEntity<?> playCard(@RequestBody PlayCardRequest request) {
+        try {
+            if (gameService.getGameState() == null) {
+                return ResponseEntity.status(404).body("Game not started yet");
+            }
+
+            Player currentPlayer = gameService.getCurrentPlayer();
+            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney());
+            
+            return ResponseEntity.ok("Card played successfully");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while playing the card");
+        }
+    }
+
+    @GetMapping("/random-card")
+    public ResponseEntity<?> getRandomCard() {
+        try {
+            if (gameService.getGameState() == null) {
+                return ResponseEntity.status(404).body("Game not started yet");
+            }
+
+            Player currentPlayer = gameService.getCurrentPlayer();
+            if (currentPlayer.getHand().isEmpty()) {
+                return ResponseEntity.status(404).body("Current player has no cards in hand");
+            }
+
+            Random random = new Random();
+            int randomIndex = random.nextInt(currentPlayer.getHand().size());
+            
+            PlayCardRequest request = new PlayCardRequest();
+            request.setCardId(currentPlayer.getHand().get(randomIndex).getId());
+            request.setPlayAsMoney(false);
+            
+            return ResponseEntity.ok(request);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while getting random card");
+        }
     }
 }
