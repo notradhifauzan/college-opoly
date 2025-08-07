@@ -10,7 +10,6 @@ import com.monopoly_deal.v1.engine.TurnManager;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
-import com.monopoly_deal.v1.utils.CardLoader;
 
 @Service
 public class GameService {
@@ -47,6 +46,16 @@ public class GameService {
         gameEngine.playCard(gameState, player, card, playAsMoney);
     }
 
+    // play a card by ID (or bank it)
+    public void playCardById(String playerName, String cardId, boolean playAsMoney) {
+        Player player = gameState.getPlayerByName(playerName);
+        Card card = player.getHand().stream()
+            .filter(c -> c.getId().equals(cardId))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Card with ID " + cardId + " not found in player's hand"));
+        gameEngine.playCard(gameState, player, card, playAsMoney);
+    }
+
     // end current player's turn
     public void endTurn() {
         turnManager.endTurn(gameState);
@@ -55,5 +64,10 @@ public class GameService {
     // get current game state (readOnly)
     public GameState getGameState() {
         return gameState;
+    }
+
+    // get current player
+    public Player getCurrentPlayer() {
+        return gameState.getCurrentPlayer();
     }
 }
