@@ -37,7 +37,7 @@ public class GameService {
     // draw cards at the start of a player's turn
     public void drawCardsForCurrentPlayer() {
         Player currPlayer = gameState.getCurrentPlayer();
-        gameEngine.drawCard(gameState, currPlayer, false);
+        gameEngine.drawCard(gameState, currPlayer, true);
         gameEngine.drawCard(gameState, currPlayer, false);
     }
 

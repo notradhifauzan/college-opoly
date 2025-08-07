@@ -22,8 +22,10 @@ public class GameEngine {
     }
 
     public void drawCard(GameState gameState, Player player, boolean isSetup) {
-        if(!turnManager.isPlayerTurn(gameState, player)) {
-            throw new IllegalStateException("It's not your turn!");
+        if(!isSetup) {
+            if(!turnManager.isPlayerTurn(gameState, player)) {
+                throw new IllegalStateException("It's not your turn!");
+            }
         }
 
         if(gameState.getCurrentPhase() != GamePhase.DRAW_PHASE) {
