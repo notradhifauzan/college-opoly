@@ -1,28 +1,119 @@
 [
     {
         "id": "prop-001",
-        "name": "Boardwalk",
+        "name": "P1",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-002",
-        "name": "Boardwalk2",
+        "name": "P2",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-003",
-        "name": "Boardwalk3",
+        "name": "P3",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-004",
-        "name": "Boardwalk4",
+        "name": "P4",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-005",
+        "name": "P5",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-006",
+        "name": "P6",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-007",
+        "name": "P7",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-008",
+        "name": "P8",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-009",
+        "name": "P9",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-010",
+        "name": "P10",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-011",
+        "name": "P11",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-012",
+        "name": "P12",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-013",
+        "name": "P13",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-014",
+        "name": "P14",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-015",
+        "name": "P15",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-016",
+        "name": "P16",
+        "cardType": "PROPERTY",
+        "color": "BLUE",
+        "value": 4
+    },
+    {
+        "id": "prop-017",
+        "name": "P17",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
