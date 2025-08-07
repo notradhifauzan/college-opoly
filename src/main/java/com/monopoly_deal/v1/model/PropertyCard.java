@@ -3,10 +3,14 @@ package com.monopoly_deal.v1.model;
 import com.monopoly_deal.v1.enums.CardType;
 import com.monopoly_deal.v1.enums.PropertyColor;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 public class PropertyCard extends Card {
     private PropertyColor color;
