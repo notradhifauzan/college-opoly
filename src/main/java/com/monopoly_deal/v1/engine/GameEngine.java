@@ -58,8 +58,6 @@ public class GameEngine {
         }
 
         cardActionService.playCard(gameState, player, card, playAsMoney);
-
-        player.getHand().remove(card);
     }
 
     public void endTurn(GameState gameState) {

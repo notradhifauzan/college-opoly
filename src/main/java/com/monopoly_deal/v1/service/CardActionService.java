@@ -1,6 +1,7 @@
 package com.monopoly_deal.v1.service;
 
 import com.monopoly_deal.v1.engine.GameState;
+import com.monopoly_deal.v1.enums.CardType;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.model.PropertyCard;
@@ -14,6 +15,9 @@ public class CardActionService {
         }
 
         if(playAsMoney) {
+            if(card.getCardType() == CardType.PROPERTY) {
+                throw new IllegalArgumentException("Property cards cannot be played as money");
+            }
             player.addToBank(card);
             System.out.println(player.getName() + " banked card: " + card.getName() + " ($" + card.getValue() + ")");
             player.getHand().remove(card);
@@ -29,8 +33,9 @@ public class CardActionService {
                 // TODO: how to put wild card, house, hotel?
                 // does a wild card ALWAYS put on top of property card?
                 player.addPropertyCard((PropertyCard) card);
-
+                break;
             case ACTION:
+                break;
             case RENT:
                 // For now, we just discard it
                 gameState.getDiscardPile().add(card);
