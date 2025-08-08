@@ -40,20 +40,14 @@ public class GameService {
         gameEngine.drawCard(gameState, currPlayer, false);
     }
 
-    // play a card (or bank it)
-    public void playCard(String playerName, Card card, boolean playAsMoney) {
-        Player player = gameState.getPlayerByName(playerName);
-        gameEngine.playCard(gameState, player, card, playAsMoney);
-    }
-
     // play a card by ID (or bank it)
-    public void playCardById(String playerName, String cardId, boolean playAsMoney) {
+    public void playCardById(String playerName, String cardId, boolean playAsMoney, List<String> targetPlayerIds) {
         Player player = gameState.getPlayerByName(playerName);
         Card card = player.getHand().stream()
             .filter(c -> c.getId().equals(cardId))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Card with ID " + cardId + " not found in player's hand"));
-        gameEngine.playCard(gameState, player, card, playAsMoney);
+        gameEngine.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
     }
 
     // end current player's turn

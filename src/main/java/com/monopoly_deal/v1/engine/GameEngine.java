@@ -5,6 +5,8 @@ import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.service.CardActionService;
 
+import java.util.List;
+
 public class GameEngine {
     private final TurnManager turnManager = new TurnManager();
     private final CardActionService cardActionService = new CardActionService();
@@ -44,7 +46,7 @@ public class GameEngine {
         }
     }
 
-    public void playCard(GameState gameState, Player player, Card card, boolean playAsMoney) {
+    public void playCard(GameState gameState, Player player, Card card, boolean playAsMoney, List<String> targetPlayerIds) {
         if(!turnManager.isPlayerTurn(gameState, player)) {
             throw new IllegalStateException("It's not your turn!");
         }
@@ -57,7 +59,7 @@ public class GameEngine {
             throw new IllegalStateException("You don't have that card. ");
         }
 
-        cardActionService.playCard(gameState, player, card, playAsMoney);
+        cardActionService.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
     }
 
     public void endTurn(GameState gameState) {

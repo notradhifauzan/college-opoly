@@ -62,7 +62,7 @@ public class GameController {
             }
 
             Player currentPlayer = gameService.getCurrentPlayer();
-            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney());
+            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney(), request.getTargetPlayerIds());
             
             return ResponseEntity.ok("Card played successfully");
         } catch (IllegalArgumentException | IllegalStateException e) {
