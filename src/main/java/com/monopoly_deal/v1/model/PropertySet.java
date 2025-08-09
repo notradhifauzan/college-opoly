@@ -9,6 +9,14 @@ import lombok.Data;
 
 @Data
 public class PropertySet {
+    /*
+     * example:
+     * 
+     * color: Dark blue
+     * property 1: Parklane
+     * property 2: Bloomsvale
+     * 
+     */
     private PropertyColor color;
     private List<PropertyCard> cards = new ArrayList<>();
 
@@ -20,5 +28,9 @@ public class PropertySet {
     // utility
     public void addCard(PropertyCard card) {
         cards.add(card);
+    }
+    
+    public boolean isComplete() {
+        return cards.size() >= color.getCompletionRequirement();
     }
 }

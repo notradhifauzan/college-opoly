@@ -3,6 +3,7 @@ package com.monopoly_deal.v1.engine;
 import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Player;
+import com.monopoly_deal.v1.model.PropertySet;
 import com.monopoly_deal.v1.service.CardActionService;
 
 import java.util.List;
@@ -69,7 +70,9 @@ public class GameEngine {
 
     public boolean checkWinCondition(GameState gameState) {
         for(Player player: gameState.getPlayers()) {
-            long completeSets = player.getPropertySets().stream().filter(set -> set.getCards().size() >= 3).count();
+            long completeSets = player.getPropertySets().stream()
+                    .filter(PropertySet::isComplete)
+                    .count();
 
             if(completeSets >= 3){
                 gameState.setGameOver(true);
