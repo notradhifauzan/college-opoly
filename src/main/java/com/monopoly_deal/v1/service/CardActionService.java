@@ -32,6 +32,6 @@ public class CardActionService {
         ActionContext context = new ActionContext(gameState, player, card, targetPlayerIds);
         strategy.execute(context);
 
-        player.getHand().remove(card);
+        player.getHand().removeIf(c -> c.getId().equals(card.getId()));
     }
 }
