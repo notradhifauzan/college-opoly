@@ -1,3 +1,4 @@
+
 ```
 v1
 ├─ .mvn
@@ -14,6 +15,11 @@ v1
    │  │  └─ com
    │  │     └─ monopoly_deal
    │  │        └─ v1
+   │  │           ├─ controller
+   │  │           │  ├─ GameController.java
+   │  │           │  └─ PlayerController.java
+   │  │           ├─ dto
+   │  │           │  └─ PlayCardRequest.java
    │  │           ├─ engine
    │  │           │  ├─ GameEngine.java
    │  │           │  ├─ GameState.java
@@ -33,8 +39,18 @@ v1
    │  │           │  └─ RentCard.java
    │  │           ├─ service
    │  │           │  ├─ CardActionService.java
+   │  │           │  ├─ context
+   │  │           │  │  └─ ActionContext.java
    │  │           │  ├─ GameService.java
-   │  │           │  └─ GameUtils.java
+   │  │           │  ├─ GameUtils.java
+   │  │           │  └─ strategies
+   │  │           │     ├─ ActionCardStrategy.java
+   │  │           │     ├─ CardActionStrategy.java
+   │  │           │     ├─ CardActionStrategyFactory.java
+   │  │           │     ├─ PropertyCardStrategy.java
+   │  │           │     └─ RentCardStrategy.java
+   │  │           ├─ utils
+   │  │           │  └─ CardLoader.java
    │  │           └─ V1Application.java
    │  └─ resources
    │     ├─ application.properties
