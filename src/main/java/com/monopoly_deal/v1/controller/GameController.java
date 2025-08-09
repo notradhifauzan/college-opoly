@@ -1,11 +1,10 @@
 package com.monopoly_deal.v1.controller;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.monopoly_deal.v1.dto.PlayCardRequest;
+import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.service.GameService;
@@ -49,9 +49,27 @@ public class GameController {
     }
 
     @PostMapping("/draw")
-    public ResponseEntity<String> drawCards() {
-        gameService.drawCardsForCurrentPlayer();
-        return ResponseEntity.ok("Cards drawn successfully.");
+    public ResponseEntity<?> drawCards() {
+        try {
+            if(gameService.getGameState() == null) {
+                return ResponseEntity.status(404).body("Game not started yet");
+            }
+            // get existing player hand
+            List<Card> previousCards = new ArrayList<>(gameService.getGameState().getCurrentPlayer().getHand());
+            gameService.drawCardsForCurrentPlayer();
+            List<Card> currentCards = gameService.getGameState().getCurrentPlayer().getHand();
+    
+            List<Card> drawnCards = new ArrayList<>(currentCards);
+            previousCards.forEach(drawnCards::remove);
+
+            
+            return ResponseEntity.ok().body(drawnCards);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(Exception e) {
+            return ResponseEntity.status(500).body("An error occured while drawing cards");
+        }
+
     }
 
     @PostMapping("/play-card")
@@ -69,6 +87,23 @@ public class GameController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while playing the card");
+        }
+    }
+
+    @PostMapping("/end-turn")
+    public ResponseEntity<?> endTurn() {
+        try {
+            if(gameService.getGameState() == null) {
+                return ResponseEntity.status(404).body("Game not started yet");
+            }
+            Player previousPlayer = gameService.getGameState().getCurrentPlayer();
+            gameService.endTurn();
+            Player nextPlayer = gameService.getGameState().getCurrentPlayer();
+            return ResponseEntity.ok("Current player: " + nextPlayer.getName() + "\n Previous player: " + previousPlayer.getName());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occured while ending turn");
         }
     }
 
