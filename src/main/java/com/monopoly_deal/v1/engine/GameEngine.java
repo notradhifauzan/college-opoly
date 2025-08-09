@@ -60,6 +60,7 @@ public class GameEngine {
         }
 
         cardActionService.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
+        checkWinCondition(gameState);
     }
 
     public void endTurn(GameState gameState) {
