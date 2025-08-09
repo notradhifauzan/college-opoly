@@ -40,8 +40,8 @@ public class Player {
         for(PropertySet set: propertySets) {
             if(set.getColor() == card.getColor()) {
                 set.addCard(card);
+                return;
             }
-            return;
         }
 
         // if no matching set found, create a new one
