@@ -1,121 +1,254 @@
 [
     {
         "id": "prop-001",
-        "name": "P1",
+        "name": "BLUE-P1",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-002",
-        "name": "P2",
+        "name": "BLUE-P2",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-003",
-        "name": "P3",
+        "name": "BLUE-P3",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-004",
-        "name": "P4",
+        "name": "BLUE-P4",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-005",
-        "name": "P5",
+        "name": "BLUE-P5",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-006",
-        "name": "P6",
+        "name": "BLUE-P6",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-007",
-        "name": "P7",
+        "name": "BLUE-P7",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-008",
-        "name": "P8",
+        "name": "BLUE-P8",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-009",
-        "name": "P9",
+        "name": "BLUE-P9",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-010",
-        "name": "P10",
+        "name": "BLUE-P10",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-011",
-        "name": "P11",
+        "name": "BLUE-P11",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-012",
-        "name": "P12",
+        "name": "BLUE-P12",
         "cardType": "PROPERTY",
         "color": "BLUE",
         "value": 4
     },
     {
         "id": "prop-013",
-        "name": "P13",
+        "name": "GREEN-P13",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "GREEN",
         "value": 4
     },
     {
         "id": "prop-014",
-        "name": "P14",
+        "name": "GREEN-P14",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "GREEN",
         "value": 4
     },
     {
         "id": "prop-015",
-        "name": "P15",
+        "name": "GREEN-P15",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "GREEN",
         "value": 4
     },
     {
         "id": "prop-016",
-        "name": "P16",
+        "name": "GREEN-P16",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "GREEN",
         "value": 4
     },
     {
         "id": "prop-017",
-        "name": "P17",
+        "name": "GREEN-P17",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-018",
+        "name": "GREEN-P18",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-019",
+        "name": "GREEN-P19",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-020",
+        "name": "GREEN-P20",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-021",
+        "name": "GREEN-P21",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-022",
+        "name": "GREEN-P22",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-023",
+        "name": "GREEN-P23",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-024",
+        "name": "GREEN-P24",
+        "cardType": "PROPERTY",
+        "color": "GREEN",
+        "value": 4
+    },
+    {
+        "id": "prop-025",
+        "name": "RED-P25",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-026",
+        "name": "RED-P26",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-027",
+        "name": "RED-P27",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-028",
+        "name": "RED-P28",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-029",
+        "name": "RED-P29",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-030",
+        "name": "RED-P30",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-031",
+        "name": "RED-P31",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-032",
+        "name": "RED-P32",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-033",
+        "name": "RED-P33",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-034",
+        "name": "RED-P34",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-035",
+        "name": "RED-P35",
+        "cardType": "PROPERTY",
+        "color": "RED",
+        "value": 4
+    },
+    {
+        "id": "prop-036",
+        "name": "RED-P36",
+        "cardType": "PROPERTY",
+        "color": "RED",
         "value": 4
     }
 ]
