@@ -2,6 +2,8 @@ package com.monopoly_deal.v1.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -54,16 +56,24 @@ public class GameController {
             if(gameService.getGameState() == null) {
                 return ResponseEntity.status(404).body("Game not started yet");
             }
+            
+            Player currentPlayer = gameService.getGameState().getCurrentPlayer();
             // get existing player hand
-            List<Card> previousCards = new ArrayList<>(gameService.getGameState().getCurrentPlayer().getHand());
+            List<Card> previousCards = new ArrayList<>(currentPlayer.getHand());
             gameService.drawCardsForCurrentPlayer();
-            List<Card> currentCards = gameService.getGameState().getCurrentPlayer().getHand();
+            List<Card> currentCards = currentPlayer.getHand();
     
             List<Card> drawnCards = new ArrayList<>(currentCards);
             previousCards.forEach(drawnCards::remove);
 
+            // Create response with player name and drawn cards
+            Map<String, Object> response = new HashMap<>();
+            response.put("playerName", currentPlayer.getName());
+            response.put("playerId", currentPlayer.getId());
+            response.put("drawnCards", drawnCards);
+            response.put("totalCardsInHand", currentCards.size());
             
-            return ResponseEntity.ok().body(drawnCards);
+            return ResponseEntity.ok().body(response);
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch(Exception e) {
@@ -82,7 +92,9 @@ public class GameController {
             Player currentPlayer = gameService.getCurrentPlayer();
             gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney(), request.getTargetPlayerIds());
             
-            return ResponseEntity.ok("Card played successfully");
+            // Return updated player state instead of simple success message
+            Player updatedPlayer = gameService.getCurrentPlayer();
+            return ResponseEntity.ok(updatedPlayer);
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

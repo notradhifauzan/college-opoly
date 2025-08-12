@@ -23,8 +23,7 @@ public class CardActionService {
                 throw new IllegalArgumentException("Property cards cannot be played as money");
             }
             player.addToBank(card);
-            System.out.println(player.getName() + " banked card: " + card.getName() + " ($" + card.getValue() + ")");
-            player.getHand().remove(card);
+            player.getHand().removeIf(c -> c.getId().equals(card.getId()));
             return;
         }
 

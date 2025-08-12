@@ -29,6 +29,7 @@ public class Player {
 
     public void addToBank(Card card) {
         bank.add(card);
+        System.out.println(getName() + " banked card: " + card.getName() + " ($" + card.getValue() + ")");
     }
     
     /*

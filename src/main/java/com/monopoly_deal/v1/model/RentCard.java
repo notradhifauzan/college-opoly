@@ -18,7 +18,7 @@ public class RentCard extends Card {
         this.name = name;
         this.value = value;
         this.applicableColors = colors;
-        this.cardType = CardType.ACTION;
+        this.cardType = CardType.RENT;
     }
     
 }
