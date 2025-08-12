@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monopoly Deal API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .endpoint {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .response {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        h2 {
+            color: #666;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .game-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        /* Card Display Styling */
+        .card-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .card-section h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .card-item {
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        
+        .card-name {
+            font-weight: bold;
+            color: #212529;
+            margin-bottom: 5px;
+        }
+        
+        .card-value {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .card-id {
+            color: #6c757d;
+            font-size: 0.8em;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        
+        .property-set {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .property-set.complete {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+        
+        .property-set-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .property-color {
+            font-weight: bold;
+            font-size: 1.1em;
+            text-transform: capitalize;
+        }
+        
+        .completion-status {
+            font-size: 0.9em;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        
+        .completion-status.complete {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .completion-status.incomplete {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .bank-total {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            color: #1976d2;
+        }
+        
+        .player-header h3 {
+            color: #495057;
+            margin-bottom: 20px;
+        }
+        
+        /* Draw cards animation */
+        @keyframes cardDraw {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .draw-header h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        /* Play Card Form Styling */
+        .play-card-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .checkbox-label {
+            display: flex !important;
+            align-items: center;
+            font-weight: normal !important;
+            justify-content: flex-start;
+            width: auto;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 8px;
+            margin-bottom: 0;
+        }
+        
+        .form-select {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+            margin-right: 10px;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .refresh-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        .play-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .play-btn:hover {
+            background-color: #218838;
+        }
+        
+        .play-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .manual-input {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+        }
+        
+        .manual-input summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .manual-form {
+            margin-top: 10px;
+        }
+        
+        .manual-form input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Monopoly Deal API Test Interface</h1>
+    
+    <div class="container game-info">
+        <h2>Game Status</h2>
+        <button onclick="getStatus()">Check Server Status</button>
+        <button onclick="getGameState()">Get Game State</button>
+        <div id="status-response" class="response"></div>
+    </div>
+
+    <div class="container">
+        <h2>Game Management</h2>
+        
+        <div class="endpoint">
+            <h3>Start Game</h3>
+            <input type="text" id="playerNames" placeholder='Enter player names (comma separated): Alice,Bob,Charlie' value="Alice,Bob,Charlie">
+            <button onclick="startGame()">Start Game</button>
+            <div id="start-response" class="response"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Draw Cards</h3>
+            <button onclick="drawCards()">Draw Cards for Current Player</button>
+            <div id="draw-response" class="response"></div>
+            
+            <!-- Visual Draw Cards Container -->
+            <div id="draw-visual" style="display: none; margin-top: 20px;">
+                <div class="draw-header">
+                    <h4 id="draw-title">Cards Drawn</h4>
+                </div>
+                <div class="card-section">
+                    <div id="drawn-cards" class="card-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <h3>End Turn</h3>
+            <button onclick="endTurn()">End Current Player's Turn</button>
+            <div id="endturn-response" class="response"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Card Actions</h2>
+        
+        <div class="endpoint">
+            <h3>Get Random Card</h3>
+            <button onclick="getRandomCard()">Get Random Card from Current Player</button>
+            <div id="random-response" class="response"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>Play Card</h3>
+            
+            <div class="play-card-form">
+                <div class="form-group">
+                    <label for="cardSelect">Select Card from Hand:</label>
+                    <select id="cardSelect" class="form-select">
+                        <option value="">-- No cards available --</option>
+                    </select>
+                    <button onclick="refreshCardOptions()" class="refresh-btn">🔄 Refresh Cards</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="playAsMoney"> Play as Money
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="targetSelect">Target Player (Optional):</label>
+                    <select id="targetSelect" class="form-select">
+                        <option value="">-- No target (or select player) --</option>
+                    </select>
+                    <button onclick="refreshPlayerOptions()" class="refresh-btn">🔄 Refresh Players</button>
+                </div>
+                
+                <div class="form-group">
+                    <button onclick="playCard()" class="play-btn">🎯 Play Selected Card</button>
+                </div>
+            </div>
+            
+            <!-- Legacy manual input (fallback) -->
+            <details class="manual-input">
+                <summary>🔧 Manual Input (Advanced)</summary>
+                <div class="manual-form">
+                    <input type="text" id="cardId" placeholder="Card ID (manual entry)">
+                    <input type="text" id="targetPlayers" placeholder="Target Player IDs (comma separated)">
+                </div>
+            </details>
+            
+            <div id="play-response" class="response"></div>
+            
+            <!-- Visual Play Card Response Container -->
+            <div id="play-visual" style="display: none; margin-top: 20px;">
+                <div class="player-header">
+                    <h3 id="play-title">Card Played Successfully</h3>
+                </div>
+                
+                <div class="card-sections">
+                    <div class="card-section">
+                        <h4>📚 Hand Cards</h4>
+                        <div id="play-hand-cards" class="card-grid"></div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h4>💰 Bank Cards</h4>
+                        <div id="play-bank-cards" class="card-grid"></div>
+                        <div id="play-bank-total" class="bank-total"></div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h4>🏠 Property Sets</h4>
+                        <div id="play-property-sets" class="property-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Player Information</h2>
+        
+        <div class="endpoint">
+            <h3>Get Player Details</h3>
+            <input type="text" id="playerName" placeholder="Player Name" value="Alice">
+            <button onclick="getPlayerDetails()">Get Player Info</button>
+            <div id="player-response" class="response"></div>
+            
+            <!-- Visual Player Details Container -->
+            <div id="player-visual" style="display: none; margin-top: 20px;">
+                <div class="player-header">
+                    <h3 id="player-title">Player Details</h3>
+                </div>
+                
+                <div class="card-sections">
+                    <div class="card-section">
+                        <h4>📚 Hand Cards</h4>
+                        <div id="hand-cards" class="card-grid"></div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h4>💰 Bank Cards</h4>
+                        <div id="bank-cards" class="card-grid"></div>
+                        <div id="bank-total" class="bank-total"></div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h4>🏠 Property Sets</h4>
+                        <div id="property-sets" class="property-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        // Utility function to display response
+        function displayResponse(elementId, data, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+            element.className = isSuccess ? 'response success' : 'response error';
+        }
+
+        // Enhanced display for player data
+        function displayPlayerResponse(elementId, playerData, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            
+            if (!isSuccess || typeof playerData !== 'object') {
+                element.textContent = typeof playerData === 'object' ? JSON.stringify(playerData, null, 2) : playerData;
+                element.className = 'response error';
+                return;
+            }
+
+            // Create formatted player state display
+            let formattedResponse = `Player: ${playerData.name || 'Unknown'}\n`;
+            formattedResponse += `ID: ${playerData.id || 'N/A'}\n\n`;
+            
+            formattedResponse += `📚 HAND (${playerData.hand ? playerData.hand.length : 0} cards):\n`;
+            if (playerData.hand && playerData.hand.length > 0) {
+                playerData.hand.forEach((card, index) => {
+                    formattedResponse += `  ${index + 1}. ${card.name} ($${card.value}) [${card.id}]\n`;
+                });
+            } else {
+                formattedResponse += '  (No cards in hand)\n';
+            }
+
+            formattedResponse += `\n💰 BANK (${playerData.bank ? playerData.bank.length : 0} cards):\n`;
+            if (playerData.bank && playerData.bank.length > 0) {
+                let totalValue = 0;
+                playerData.bank.forEach((card, index) => {
+                    formattedResponse += `  ${index + 1}. ${card.name} ($${card.value})\n`;
+                    totalValue += card.value || 0;
+                });
+                formattedResponse += `  Total Bank Value: $${totalValue}\n`;
+            } else {
+                formattedResponse += '  (No cards in bank)\n';
+            }
+
+            formattedResponse += `\n🏠 PROPERTY SETS (${playerData.propertySets ? playerData.propertySets.length : 0} sets):\n`;
+            if (playerData.propertySets && playerData.propertySets.length > 0) {
+                playerData.propertySets.forEach((set, index) => {
+                    const isComplete = set.complete ? '✅ COMPLETE' : '❌ Incomplete';
+                    formattedResponse += `  Set ${index + 1}: ${set.color} ${isComplete} (${set.cards ? set.cards.length : 0} cards)\n`;
+                    if (set.cards && set.cards.length > 0) {
+                        set.cards.forEach(card => {
+                            formattedResponse += `    - ${card.name} ($${card.value})\n`;
+                        });
+                    }
+                });
+            } else {
+                formattedResponse += '  (No property sets)\n';
+            }
+
+            element.textContent = formattedResponse;
+            element.className = 'response success';
+        }
+
+        // API calls
+        async function getStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/game/status`);
+                const data = await response.text();
+                displayResponse('status-response', data, response.ok);
+            } catch (error) {
+                displayResponse('status-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        async function getGameState() {
+            try {
+                const response = await fetch(`${API_BASE}/game/state`);
+                const data = await response.json();
+                displayResponse('status-response', data, response.ok);
+            } catch (error) {
+                displayResponse('status-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        async function startGame() {
+            try {
+                const playerNames = document.getElementById('playerNames').value.split(',').map(name => name.trim());
+                const response = await fetch(`${API_BASE}/game/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(playerNames)
+                });
+                const data = await response.text();
+                displayResponse('start-response', data, response.ok);
+            } catch (error) {
+                displayResponse('start-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        // Visual draw cards display function
+        function renderDrawCardsVisual(drawData) {
+            const visualContainer = document.getElementById('draw-visual');
+            const drawTitle = document.getElementById('draw-title');
+            const drawnCardsContainer = document.getElementById('drawn-cards');
+            
+            // Update title with player info
+            drawTitle.innerHTML = `🎴 ${drawData.playerName} drew ${drawData.drawnCards.length} cards <span style="color: #6c757d; font-size: 0.9em;">(Total in hand: ${drawData.totalCardsInHand})</span>`;
+            
+            // Clear previous cards
+            drawnCardsContainer.innerHTML = '';
+            
+            // Render drawn cards
+            if (drawData.drawnCards && drawData.drawnCards.length > 0) {
+                drawData.drawnCards.forEach(card => {
+                    const cardElement = createCardElement(card);
+                    cardElement.style.animation = 'cardDraw 0.5s ease-out';
+                    drawnCardsContainer.appendChild(cardElement);
+                });
+            } else {
+                drawnCardsContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No cards were drawn</p>';
+            }
+            
+            // Show the visual container
+            visualContainer.style.display = 'block';
+        }
+
+        async function drawCards() {
+            try {
+                const response = await fetch(`${API_BASE}/game/draw`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Hide the old text response and show visual cards
+                    document.getElementById('draw-response').style.display = 'none';
+                    renderDrawCardsVisual(data);
+                } else {
+                    // Show error in text response and hide visual
+                    document.getElementById('draw-visual').style.display = 'none';
+                    document.getElementById('draw-response').style.display = 'block';
+                    displayResponse('draw-response', data, false);
+                }
+            } catch (error) {
+                document.getElementById('draw-visual').style.display = 'none';
+                document.getElementById('draw-response').style.display = 'block';
+                displayResponse('draw-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        async function endTurn() {
+            try {
+                const response = await fetch(`${API_BASE}/game/end-turn`, {
+                    method: 'POST'
+                });
+                const data = await response.text();
+                displayResponse('endturn-response', data, response.ok);
+            } catch (error) {
+                displayResponse('endturn-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        async function getRandomCard() {
+            try {
+                const response = await fetch(`${API_BASE}/game/random-card`);
+                const data = await response.json();
+                displayResponse('random-response', data, response.ok);
+                
+                // Auto-fill the card ID for convenience
+                if (response.ok && data.cardId) {
+                    document.getElementById('cardId').value = data.cardId;
+                }
+            } catch (error) {
+                displayResponse('random-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        // Functions to populate dropdown options
+        async function refreshCardOptions() {
+            const cardSelect = document.getElementById('cardSelect');
+            const playBtn = document.querySelector('.play-btn');
+            
+            try {
+                // Get current player's hand
+                const response = await fetch(`${API_BASE}/game/state`);
+                if (!response.ok) {
+                    cardSelect.innerHTML = '<option value="">-- Game not started --</option>';
+                    playBtn.disabled = true;
+                    return;
+                }
+                
+                const gameState = await response.json();
+                const currentPlayer = gameState.currentPlayer;
+                
+                if (!currentPlayer || !currentPlayer.hand || currentPlayer.hand.length === 0) {
+                    cardSelect.innerHTML = '<option value="">-- No cards in hand --</option>';
+                    playBtn.disabled = true;
+                    return;
+                }
+                
+                // Populate card options
+                cardSelect.innerHTML = '<option value="">-- Select a card --</option>';
+                currentPlayer.hand.forEach(card => {
+                    const option = document.createElement('option');
+                    option.value = card.id;
+                    option.textContent = `${card.name} ($${card.value}) - ${card.cardType || 'UNKNOWN'}`;
+                    cardSelect.appendChild(option);
+                });
+                
+                playBtn.disabled = false;
+                
+            } catch (error) {
+                cardSelect.innerHTML = '<option value="">-- Error loading cards --</option>';
+                playBtn.disabled = true;
+                console.error('Error refreshing card options:', error);
+            }
+        }
+        
+        async function refreshPlayerOptions() {
+            const targetSelect = document.getElementById('targetSelect');
+            
+            try {
+                // Get game state for all players
+                const response = await fetch(`${API_BASE}/game/state`);
+                if (!response.ok) {
+                    targetSelect.innerHTML = '<option value="">-- Game not started --</option>';
+                    return;
+                }
+                
+                const gameState = await response.json();
+                const currentPlayer = gameState.currentPlayer;
+                
+                if (!gameState.players || gameState.players.length === 0) {
+                    targetSelect.innerHTML = '<option value="">-- No players available --</option>';
+                    return;
+                }
+                
+                // Populate player options (excluding current player)
+                targetSelect.innerHTML = '<option value="">-- No target (optional) --</option>';
+                gameState.players.forEach(player => {
+                    if (player.id !== currentPlayer.id) {  // Don't target yourself
+                        const option = document.createElement('option');
+                        option.value = player.id;
+                        option.textContent = `${player.name} (ID: ${player.id.substring(0, 8)}...)`;
+                        targetSelect.appendChild(option);
+                    }
+                });
+                
+            } catch (error) {
+                targetSelect.innerHTML = '<option value="">-- Error loading players --</option>';
+                console.error('Error refreshing player options:', error);
+            }
+        }
+
+        // Visual play card response display function
+        function renderPlayCardVisual(playerData, cardName, playAsMoney) {
+            const visualContainer = document.getElementById('play-visual');
+            const playTitle = document.getElementById('play-title');
+            
+            // Update title with action info
+            const actionType = playAsMoney ? 'banked' : 'played';
+            playTitle.textContent = `✅ ${playerData.name || 'Unknown'} ${actionType} "${cardName || 'a card'}"`;
+            
+            // Clear previous content
+            document.getElementById('play-hand-cards').innerHTML = '';
+            document.getElementById('play-bank-cards').innerHTML = '';
+            document.getElementById('play-property-sets').innerHTML = '';
+            document.getElementById('play-bank-total').innerHTML = '';
+            
+            // Render hand cards
+            const handContainer = document.getElementById('play-hand-cards');
+            if (playerData.hand && playerData.hand.length > 0) {
+                playerData.hand.forEach(card => {
+                    handContainer.appendChild(createCardElement(card));
+                });
+            } else {
+                handContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No cards in hand</p>';
+            }
+            
+            // Render bank cards
+            const bankContainer = document.getElementById('play-bank-cards');
+            const bankTotalDiv = document.getElementById('play-bank-total');
+            let totalBankValue = 0;
+            
+            if (playerData.bank && playerData.bank.length > 0) {
+                playerData.bank.forEach(card => {
+                    bankContainer.appendChild(createCardElement(card));
+                    totalBankValue += card.value || 0;
+                });
+                bankTotalDiv.innerHTML = `💰 Total Bank Value: $${totalBankValue}`;
+            } else {
+                bankContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No cards in bank</p>';
+                bankTotalDiv.innerHTML = '💰 Total Bank Value: $0';
+            }
+            
+            // Render property sets
+            const propertySetsContainer = document.getElementById('play-property-sets');
+            if (playerData.propertySets && playerData.propertySets.length > 0) {
+                playerData.propertySets.forEach(set => {
+                    const setDiv = document.createElement('div');
+                    setDiv.className = `property-set ${set.complete ? 'complete' : ''}`;
+                    
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'property-set-header';
+                    
+                    const colorDiv = document.createElement('div');
+                    colorDiv.className = 'property-color';
+                    colorDiv.textContent = `${set.color || 'Unknown'} Properties`;
+                    
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = `completion-status ${set.complete ? 'complete' : 'incomplete'}`;
+                    statusDiv.textContent = set.complete ? '✅ Complete' : '❌ Incomplete';
+                    
+                    headerDiv.appendChild(colorDiv);
+                    headerDiv.appendChild(statusDiv);
+                    setDiv.appendChild(headerDiv);
+                    
+                    // Add property cards
+                    const cardsGrid = document.createElement('div');
+                    cardsGrid.className = 'card-grid';
+                    
+                    if (set.cards && set.cards.length > 0) {
+                        set.cards.forEach(card => {
+                            cardsGrid.appendChild(createCardElement(card));
+                        });
+                    }
+                    
+                    setDiv.appendChild(cardsGrid);
+                    propertySetsContainer.appendChild(setDiv);
+                });
+            } else {
+                propertySetsContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No property sets</p>';
+            }
+            
+            // Show the visual container
+            visualContainer.style.display = 'block';
+        }
+
+        async function playCard() {
+            try {
+                // Get values from dropdowns first, fallback to manual inputs
+                let cardId = document.getElementById('cardSelect').value;
+                const playAsMoney = document.getElementById('playAsMoney').checked;
+                let targetPlayerId = document.getElementById('targetSelect').value;
+                
+                // Store selected card name for display
+                let selectedCardName = '';
+                const cardSelect = document.getElementById('cardSelect');
+                if (cardSelect.value) {
+                    selectedCardName = cardSelect.options[cardSelect.selectedIndex].text.split(' ($')[0];
+                }
+                
+                // Fallback to manual inputs if dropdowns are empty
+                if (!cardId) {
+                    cardId = document.getElementById('cardId').value;
+                }
+                
+                if (!targetPlayerId) {
+                    const targetPlayersText = document.getElementById('targetPlayers').value;
+                    if (targetPlayersText) {
+                        // Handle comma separated IDs from manual input
+                        const targetPlayerIds = targetPlayersText.split(',').map(id => id.trim());
+                        targetPlayerId = targetPlayerIds[0]; // Take first one for dropdown compatibility
+                    }
+                }
+                
+                // Validate card selection
+                if (!cardId) {
+                    alert('Please select a card to play or enter a card ID manually.');
+                    return;
+                }
+                
+                // Prepare target player IDs array
+                const targetPlayerIds = targetPlayerId ? [targetPlayerId] : [];
+
+                const requestBody = {
+                    cardId: cardId,
+                    playAsMoney: playAsMoney,
+                    targetPlayerIds: targetPlayerIds
+                };
+
+                const response = await fetch(`${API_BASE}/game/play-card`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Hide the old text response and show visual cards
+                    document.getElementById('play-response').style.display = 'none';
+                    renderPlayCardVisual(data, selectedCardName, playAsMoney);
+                } else {
+                    // Show error in text response and hide visual
+                    document.getElementById('play-visual').style.display = 'none';
+                    document.getElementById('play-response').style.display = 'block';
+                    displayResponse('play-response', data, false);
+                }
+                
+                // Refresh dropdowns after successful play
+                if (response.ok) {
+                    setTimeout(() => {
+                        refreshCardOptions();
+                        refreshPlayerOptions();
+                    }, 500);
+                }
+            } catch (error) {
+                document.getElementById('play-visual').style.display = 'none';
+                document.getElementById('play-response').style.display = 'block';
+                displayResponse('play-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        // Visual card display functions
+        function createCardElement(card) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card-item';
+            cardDiv.innerHTML = `
+                <div class="card-name">${card.name || 'Unknown Card'}</div>
+                <div class="card-value">$${card.value || 0}</div>
+                <div class="card-id">ID: ${card.id}</div>
+            `;
+            return cardDiv;
+        }
+
+        function renderVisualPlayerDetails(playerData) {
+            const visualContainer = document.getElementById('player-visual');
+            const playerTitle = document.getElementById('player-title');
+            
+            // Update player title
+            playerTitle.textContent = `${playerData.name || 'Unknown'} - Player Details`;
+            
+            // Clear previous content
+            document.getElementById('hand-cards').innerHTML = '';
+            document.getElementById('bank-cards').innerHTML = '';
+            document.getElementById('property-sets').innerHTML = '';
+            document.getElementById('bank-total').innerHTML = '';
+            
+            // Render hand cards
+            const handContainer = document.getElementById('hand-cards');
+            if (playerData.hand && playerData.hand.length > 0) {
+                playerData.hand.forEach(card => {
+                    handContainer.appendChild(createCardElement(card));
+                });
+            } else {
+                handContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No cards in hand</p>';
+            }
+            
+            // Render bank cards
+            const bankContainer = document.getElementById('bank-cards');
+            const bankTotalDiv = document.getElementById('bank-total');
+            let totalBankValue = 0;
+            
+            if (playerData.bank && playerData.bank.length > 0) {
+                playerData.bank.forEach(card => {
+                    bankContainer.appendChild(createCardElement(card));
+                    totalBankValue += card.value || 0;
+                });
+                bankTotalDiv.innerHTML = `💰 Total Bank Value: $${totalBankValue}`;
+            } else {
+                bankContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No cards in bank</p>';
+                bankTotalDiv.innerHTML = '💰 Total Bank Value: $0';
+            }
+            
+            // Render property sets
+            const propertySetsContainer = document.getElementById('property-sets');
+            if (playerData.propertySets && playerData.propertySets.length > 0) {
+                playerData.propertySets.forEach(set => {
+                    const setDiv = document.createElement('div');
+                    setDiv.className = `property-set ${set.complete ? 'complete' : ''}`;
+                    
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'property-set-header';
+                    
+                    const colorDiv = document.createElement('div');
+                    colorDiv.className = 'property-color';
+                    colorDiv.textContent = `${set.color || 'Unknown'} Properties`;
+                    
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = `completion-status ${set.complete ? 'complete' : 'incomplete'}`;
+                    statusDiv.textContent = set.complete ? '✅ Complete' : '❌ Incomplete';
+                    
+                    headerDiv.appendChild(colorDiv);
+                    headerDiv.appendChild(statusDiv);
+                    setDiv.appendChild(headerDiv);
+                    
+                    // Add property cards
+                    const cardsGrid = document.createElement('div');
+                    cardsGrid.className = 'card-grid';
+                    
+                    if (set.cards && set.cards.length > 0) {
+                        set.cards.forEach(card => {
+                            cardsGrid.appendChild(createCardElement(card));
+                        });
+                    }
+                    
+                    setDiv.appendChild(cardsGrid);
+                    propertySetsContainer.appendChild(setDiv);
+                });
+            } else {
+                propertySetsContainer.innerHTML = '<p style="color: #6c757d; text-align: center;">No property sets</p>';
+            }
+            
+            // Show the visual container
+            visualContainer.style.display = 'block';
+        }
+
+        async function getPlayerDetails() {
+            try {
+                const playerName = document.getElementById('playerName').value;
+                const response = await fetch(`${API_BASE}/player/${encodeURIComponent(playerName)}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Hide the old text response and show visual cards
+                    document.getElementById('player-response').style.display = 'none';
+                    renderVisualPlayerDetails(data);
+                } else {
+                    // Show error in text response and hide visual
+                    document.getElementById('player-visual').style.display = 'none';
+                    document.getElementById('player-response').style.display = 'block';
+                    displayResponse('player-response', data, false);
+                }
+            } catch (error) {
+                document.getElementById('player-visual').style.display = 'none';
+                document.getElementById('player-response').style.display = 'block';
+                displayResponse('player-response', `Error: ${error.message}`, false);
+            }
+        }
+
+        // Initialize with status check and populate dropdowns
+        window.onload = function() {
+            getStatus();
+            refreshCardOptions();
+            refreshPlayerOptions();
+        };
+        
+        // Auto-refresh dropdowns after certain actions
+        const originalDrawCards = drawCards;
+        const originalEndTurn = endTurn;
+        
+        drawCards = async function() {
+            await originalDrawCards();
+            setTimeout(() => {
+                refreshCardOptions();
+                refreshPlayerOptions();
+            }, 500);
+        };
+        
+        endTurn = async function() {
+            await originalEndTurn();
+            setTimeout(() => {
+                refreshCardOptions();
+                refreshPlayerOptions();
+            }, 500);
+        };
+    </script>
+</body>
+</html>
