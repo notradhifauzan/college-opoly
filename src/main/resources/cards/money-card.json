@@ -1,0 +1,74 @@
+[
+    {
+        "id": "money-001",
+        "name": "MONEY-1M",
+        "cardType": "MONEY",
+        "value": 1
+    },
+    {
+        "id": "money-002",
+        "name": "MONEY-1M",
+        "cardType": "MONEY",
+        "value": 1
+    },
+    {
+        "id": "money-003",
+        "name": "MONEY-1M",
+        "cardType": "MONEY",
+        "value": 1
+    },
+    {
+        "id": "money-004",
+        "name": "MONEY-2M",
+        "cardType": "MONEY",
+        "value": 2
+    },
+    {
+        "id": "money-005",
+        "name": "MONEY-2M",
+        "cardType": "MONEY",
+        "value": 2
+    },
+    {
+        "id": "money-006",
+        "name": "MONEY-2M",
+        "cardType": "MONEY",
+        "value": 2
+    },
+    {
+        "id": "money-007",
+        "name": "MONEY-3M",
+        "cardType": "MONEY",
+        "value": 3
+    },
+    {
+        "id": "money-008",
+        "name": "MONEY-3M",
+        "cardType": "MONEY",
+        "value": 3
+    },
+    {
+        "id": "money-009",
+        "name": "MONEY-3M",
+        "cardType": "MONEY",
+        "value": 3
+    },
+    {
+        "id": "money-010",
+        "name": "MONEY-5M",
+        "cardType": "MONEY",
+        "value": 5
+    },
+    {
+        "id": "money-011",
+        "name": "MONEY-5M",
+        "cardType": "MONEY",
+        "value": 5
+    },
+    {
+        "id": "money-012",
+        "name": "MONEY-5M",
+        "cardType": "MONEY",
+        "value": 5
+    }
+]

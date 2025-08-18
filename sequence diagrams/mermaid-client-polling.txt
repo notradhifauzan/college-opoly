@@ -1,0 +1,39 @@
+sequenceDiagram
+    participant Client
+    participant Server
+
+    Title: Client-Side Polling Logic
+
+    Client->>Client: Start polling process
+    
+    loop Is Polling Active?
+        Client->>+Server: GET /resource/state
+        Server-->>-Client: 200 OK (State: "No Update")
+        Client->>Client: Process response (nothing to do)
+    end
+
+    Note right of Client: Client continues this loop...<br/>(e.g., every 3 seconds)
+
+    loop Is Polling Active?
+        Client->>+Server: GET /resource/state
+        Server-->>-Client: 200 OK (State: "No Update")
+        Client->>Client: Process response (nothing to do)
+    end
+    
+    Note right of Client: ...until the state changes on the server.
+
+    loop Is Polling Active?
+        Client->>+Server: GET /resource/state
+        Server-->>-Client: 200 OK (State: "Action Required!")
+        
+        Client->>Client: 1. Detect state change!
+        Client->>Client: 2. Stop the polling loop.
+        Client->>Client: 3. Update UI to show prompt.
+    end
+
+    Note right of Client: Polling is now stopped while<br/>the user makes a decision.
+
+    Client->>+Server: POST /resource/action (User's response)
+    Server-->>-Client: 200 OK (Action processed)
+
+    Client->>Client: Resume polling process...

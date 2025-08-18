@@ -22,86 +22,86 @@
     },
     {
         "id": "prop-004",
-        "name": "BLUE-P4",
+        "name": "NAVY-P4",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "NAVY",
         "value": 4
     },
     {
         "id": "prop-005",
-        "name": "BLUE-P5",
+        "name": "NAVY-P5",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "NAVY",
         "value": 4
     },
     {
         "id": "prop-006",
-        "name": "BLUE-P6",
+        "name": "NAVY-P6",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "NAVY",
         "value": 4
     },
     {
         "id": "prop-007",
-        "name": "BLUE-P7",
+        "name": "ORANGE-P7",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "ORANGE",
         "value": 4
     },
     {
         "id": "prop-008",
-        "name": "BLUE-P8",
+        "name": "ORANGE-P8",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "ORANGE",
         "value": 4
     },
     {
         "id": "prop-009",
-        "name": "BLUE-P9",
+        "name": "ORANGE-P9",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "ORANGE",
         "value": 4
     },
     {
         "id": "prop-010",
-        "name": "BLUE-P10",
+        "name": "PINK-P10",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "PINK",
         "value": 4
     },
     {
         "id": "prop-011",
-        "name": "BLUE-P11",
+        "name": "PINK-P11",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "PINK",
         "value": 4
     },
     {
         "id": "prop-012",
-        "name": "BLUE-P12",
+        "name": "PINK-P12",
         "cardType": "PROPERTY",
-        "color": "BLUE",
+        "color": "PINK",
         "value": 4
     },
     {
         "id": "prop-013",
-        "name": "GREEN-P13",
+        "name": "PURPLE-P13",
         "cardType": "PROPERTY",
-        "color": "GREEN",
+        "color": "PURPLE",
         "value": 4
     },
     {
         "id": "prop-014",
-        "name": "GREEN-P14",
+        "name": "PURPLE-P14",
         "cardType": "PROPERTY",
-        "color": "GREEN",
+        "color": "PURPLE",
         "value": 4
     },
     {
         "id": "prop-015",
-        "name": "GREEN-P15",
+        "name": "PURPLE-P15",
         "cardType": "PROPERTY",
-        "color": "GREEN",
+        "color": "PURPLE",
         "value": 4
     },
     {
@@ -126,48 +126,6 @@
         "value": 4
     },
     {
-        "id": "prop-019",
-        "name": "GREEN-P19",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
-        "id": "prop-020",
-        "name": "GREEN-P20",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
-        "id": "prop-021",
-        "name": "GREEN-P21",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
-        "id": "prop-022",
-        "name": "GREEN-P22",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
-        "id": "prop-023",
-        "name": "GREEN-P23",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
-        "id": "prop-024",
-        "name": "GREEN-P24",
-        "cardType": "PROPERTY",
-        "color": "GREEN",
-        "value": 4
-    },
-    {
         "id": "prop-025",
         "name": "RED-P25",
         "cardType": "PROPERTY",
@@ -184,69 +142,6 @@
     {
         "id": "prop-027",
         "name": "RED-P27",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-028",
-        "name": "RED-P28",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-029",
-        "name": "RED-P29",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-030",
-        "name": "RED-P30",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-031",
-        "name": "RED-P31",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-032",
-        "name": "RED-P32",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-033",
-        "name": "RED-P33",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-034",
-        "name": "RED-P34",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-035",
-        "name": "RED-P35",
-        "cardType": "PROPERTY",
-        "color": "RED",
-        "value": 4
-    },
-    {
-        "id": "prop-036",
-        "name": "RED-P36",
         "cardType": "PROPERTY",
         "color": "RED",
         "value": 4

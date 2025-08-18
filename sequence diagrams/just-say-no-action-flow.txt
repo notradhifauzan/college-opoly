@@ -1,0 +1,68 @@
+sequenceDiagram
+    participant ClientA as Player A's Client
+    participant ClientB as Player B's Client
+    participant Server
+
+    Title: WebSocket Flow - Rent Card Countered by "Just Say No"
+
+    Note over ClientA, Server: Player A has an active WebSocket connection.
+    Note over ClientB, Server: Player B has an active WebSocket connection.
+
+    %% --- Step 1: Player A Plays a Rent Card --- %%
+    ClientA->>+Server: Sends WS Message (action: "playCard", card: RentCard, target: B)
+    Server->>Server: 1. Validate play.
+    Server->>Server: 2. Create PendingAction(type: RENT_PAYMENT, from: A, to: B, amount: 5M)
+    Server->>Server: 3. Update GameState with this PendingAction.
+    Server-->>ClientA: Pushes GameState update
+    Server-->>ClientB: Pushes GameState update
+    deactivate Server
+
+    ClientA->>ClientA: UI: "Waiting for Player B to pay rent..."
+    ClientB->>ClientB: UI: "Player A requests 5M rent. Pay or Counter?"
+
+    %% --- Step 2: Player B Counters with "Just Say No" --- %%
+    Note over ClientB: Player B chooses to play their 'Just Say No' card.
+    ClientB->>+Server: Sends WS Message (action: "playCard", card: JustSayNo, target: A)
+    
+    Server->>Server: 1. Validate B can play this card.
+    Server->>Server: 2. This is a counter. Clear the RENT_PAYMENT action.
+    Server->>Server: 3. Create NEW PendingAction(type: COUNTER_RESPONSE, from: B, to: A, originalAction: Rent)
+    Note over Server: The game now waits for Player A to respond to the counter.
+    Server->>Server: 4. Update GameState with the new PendingAction.
+
+    Server-->>ClientA: Pushes GameState update
+    Server-->>ClientB: Pushes GameState update
+    deactivate Server
+
+    ClientB->>ClientB: UI: "Waiting for Player A to respond to your 'Just Say No'..."
+    ClientA->>ClientA: UI: "Player B countered! Counter back with your own 'Just Say No'?"
+
+    %% --- Step 3: Player A Counters the Counter --- %%
+    Note over ClientA: Player A also has a 'Just Say No' and decides to use it.
+    ClientA->>+Server: Sends WS Message (action: "playCard", card: JustSayNo, target: B)
+
+    Server->>Server: 1. Validate A can play this card.
+    Server->>Server: 2. This is a counter to a counter. Clear the COUNTER_RESPONSE action.
+    Server->>Server: 3. The original Rent Card play is now unstoppable.
+    Server->>Server: 4. RE-CREATE the original PendingAction(type: RENT_PAYMENT, from: A, to: B, amount: 5M)
+    Note over Server: The game state has reverted to waiting for B to pay rent.
+
+    Server-->>ClientA: Pushes GameState update
+    Server-->>ClientB: Pushes GameState update
+    deactivate Server
+
+    ClientA->>ClientA: UI: "Your counter was successful! Waiting for B to pay..."
+    ClientB->>ClientB: UI: "Your 'Just Say No' was countered! You must pay 5M rent."
+
+    %% --- Step 4: Player B Finally Pays the Rent --- %%
+    ClientB->>+Server: Sends WS Message (action: "respondToRent", paymentCards)
+    Server->>Server: 1. Validate payment against the RENT_PAYMENT action.
+    Server->>Server: 2. Transfer funds from B to A.
+    Server->>Server: 3. Clear the PendingAction from GameState.
+    Note over Server: All pending actions are resolved. The game can proceed.
+
+    Server-->>ClientA: Pushes Final GameState update
+    Server-->>ClientB: Pushes Final GameState update
+    deactivate Server
+
+    Note over ClientA, ClientB: Everyone's UI is now up-to-date. The turn can continue.

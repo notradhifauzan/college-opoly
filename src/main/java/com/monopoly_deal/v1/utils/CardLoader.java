@@ -16,12 +16,17 @@ public class CardLoader {
         List<Card> allCards = new ArrayList<>();
 
         allCards.addAll(loadPropertyCards());
+        allCards.addAll(loadMoneyCards());
 
         return allCards;
     }
 
     private static <T> List<PropertyCard> loadPropertyCards() {
         return readCards("/cards/property-card.json", new TypeReference<List<PropertyCard>>() {});
+    }
+
+    private static <T> List<PropertyCard> loadMoneyCards() {
+        return readCards("/cards/money-card.json", new TypeReference<List<PropertyCard>>() {});
     }
 
     private static <T extends Card> List<T> readCards(String path, TypeReference<List<T>> typeRef) {
