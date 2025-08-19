@@ -48,6 +48,7 @@
         var stompClient = null;
         var connectedPlayers = [];
         var gameStateRefreshInterval = null;
+        var myPlayerId = null;
         
         function connect() {
             var socket = new SockJS('/ws');
@@ -84,17 +85,32 @@
                         var error = messageBody.replace('GAME_START_ERROR:', '');
                         showMessage('Error', 'Failed to start game: ' + error);
                         document.getElementById('startBtn').disabled = false; // Re-enable button on error
+                    } else if (messageBody.startsWith('DRAW_ERROR:')) {
+                        // Handle draw card error
+                        var error = messageBody.replace('DRAW_ERROR:', '');
+                        showMessage('Error', 'Failed to draw cards: ' + error);
                     } else {
-                        // Handle other messages (like game state updates)
+                        // Handle other messages (like game state updates or draw results)
                         try {
-                            var gameState = JSON.parse(messageBody);
-                            handleGameStateUpdate(gameState);
+                            var jsonMessage = JSON.parse(messageBody);
+                            
+                            if (jsonMessage.type === 'DRAW_SUCCESS_PRIVATE') {
+                                handleDrawSuccessPrivate(jsonMessage);
+                            } else if (jsonMessage.type === 'DRAW_SUCCESS_PUBLIC') {
+                                handleDrawSuccessPublic(jsonMessage);
+                            } else {
+                                // Assume it's a game state update
+                                handleGameStateUpdate(jsonMessage);
+                            }
                         } catch (e) {
                             // If not JSON, treat as regular message
                             showMessage('Game Update', messageBody);
                         }
                     }
                 });
+                
+                // Subscribe to private messages (will be set up after we know player ID)
+                // We'll subscribe to this later when we get the player ID from game state
                 
                 showMessage('System', 'Connected to WebSocket');
             });
@@ -175,34 +191,10 @@
                         return;
                     }
                     
-                    // Proceed with drawing cards
+                    // Proceed with drawing cards via WebSocket
                     if (stompClient) {
-                        fetch('/game/draw', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            document.getElementById('drawResult').innerHTML = 
-                                '<strong>Draw Result:</strong> ' + data.playerName + ' drew ' + data.drawnCards.length + ' cards. Total cards: ' + data.totalCardsInHand;
-                            
-                            // Show drawn cards
-                            let drawnCardsHtml = '<strong>Cards drawn:</strong><ul>';
-                            data.drawnCards.forEach(card => {
-                                drawnCardsHtml += '<li>' + card.name + ' (' + card.type + ')</li>';
-                            });
-                            drawnCardsHtml += '</ul>';
-                            document.getElementById('drawResult').innerHTML += drawnCardsHtml;
-                            
-                            showMessage('System', data.playerName + ' drew ' + data.drawnCards.length + ' cards');
-                            updatePlayerHand();
-                            updateCurrentPlayerInfo(); // Refresh turn info after drawing
-                        })
-                        .catch(error => {
-                            showMessage('Error', 'Failed to draw cards: ' + error);
-                        });
+                        stompClient.send("/app/game/draw", {}, {});
+                        showMessage('System', 'Drawing cards...');
                     }
                 })
                 .catch(error => {
@@ -264,6 +256,33 @@
             setTimeout(updateCurrentPlayerInfo, 500); // Small delay to ensure backend is ready
         }
         
+        function handleDrawSuccessPrivate(drawData) {
+            // This shows the actual cards drawn - only for the drawing player
+            document.getElementById('drawResult').innerHTML = 
+                '<strong>Draw Result:</strong> You drew ' + drawData.drawnCards.length + ' cards. Total cards: ' + drawData.totalCardsInHand;
+            
+            // Show drawn cards (only you can see these)
+            let drawnCardsHtml = '<strong>Your cards drawn:</strong><ul>';
+            drawData.drawnCards.forEach(card => {
+                drawnCardsHtml += '<li>' + card.name + ' (' + card.type + ')</li>';
+            });
+            drawnCardsHtml += '</ul>';
+            document.getElementById('drawResult').innerHTML += drawnCardsHtml;
+            
+            showMessage('You', 'You drew ' + drawData.drawnCards.length + ' cards');
+        }
+        
+        function handleDrawSuccessPublic(drawData) {
+            // This shows generic info - for all other players
+            let myPlayerName = document.getElementById('playerName').value;
+            if (drawData.playerName !== myPlayerName) {
+                document.getElementById('drawResult').innerHTML = 
+                    '<strong>Draw Result:</strong> ' + drawData.playerName + ' drew ' + drawData.cardsDrawn + ' cards. Total cards: ' + drawData.totalCardsInHand;
+                
+                showMessage('System', drawData.playerName + ' drew ' + drawData.cardsDrawn + ' cards');
+            }
+        }
+        
         function handleGameStateUpdate(gameState) {
             if (gameState && gameState.currentPlayer) {
                 let currentPlayerName = gameState.currentPlayer.name;
@@ -278,9 +297,15 @@
                 // Enable/disable draw button based on turn
                 document.getElementById('drawBtn').disabled = !isMyTurn;
                 
-                // Update hand if it's this player
+                // Update hand and set up private messaging if it's this player
                 let currentPlayer = gameState.players.find(p => p.name === myPlayerName);
                 if (currentPlayer) {
+                    // Set up private messaging if not already done
+                    if (myPlayerId !== currentPlayer.id) {
+                        myPlayerId = currentPlayer.id;
+                        setupPrivateMessaging();
+                    }
+                    
                     let handList = document.getElementById('handList');
                     handList.innerHTML = '';
                     currentPlayer.hand.forEach(card => {
@@ -289,6 +314,22 @@
                         handList.appendChild(li);
                     });
                 }
+            }
+        }
+        
+        function setupPrivateMessaging() {
+            if (stompClient && myPlayerId && !stompClient.hasSubscription('/queue/player/' + myPlayerId)) {
+                stompClient.subscribe('/queue/player/' + myPlayerId, function(message) {
+                    try {
+                        var privateMessage = JSON.parse(message.body);
+                        if (privateMessage.type === 'DRAW_SUCCESS_PRIVATE') {
+                            handleDrawSuccessPrivate(privateMessage);
+                        }
+                    } catch (e) {
+                        console.log('Could not parse private message:', e);
+                    }
+                });
+                console.log('Set up private messaging for player:', myPlayerId);
             }
         }
         

@@ -1,14 +1,19 @@
 package com.monopoly_deal.v1.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.service.GameService;
@@ -43,6 +48,55 @@ public class WebSocketController {
             return "GAME_STARTED:" + String.join(",", playerNames);
         } catch (Exception e) {
             return "GAME_START_ERROR:" + e.getMessage();
+        }
+    }
+
+    @MessageMapping("/game/draw")
+    public void drawCards() {
+        try {
+            if(gameService.getGameState() == null) {
+                messagingTemplate.convertAndSend("/topic/game/updates", "DRAW_ERROR:Game not started yet");
+                return;
+            }
+            
+            Player currentPlayer = gameService.getGameState().getCurrentPlayer();
+            // get existing player hand
+            List<Card> previousCards = new ArrayList<>(currentPlayer.getHand());
+            gameService.drawCardsForCurrentPlayer();
+            List<Card> currentCards = currentPlayer.getHand();
+    
+            List<Card> drawnCards = new ArrayList<>(currentCards);
+            previousCards.forEach(drawnCards::remove);
+
+            // Create private response with actual card details for the drawing player
+            Map<String, Object> privateResponse = new HashMap<>();
+            privateResponse.put("type", "DRAW_SUCCESS_PRIVATE");
+            privateResponse.put("playerName", currentPlayer.getName());
+            privateResponse.put("playerId", currentPlayer.getId());
+            privateResponse.put("drawnCards", drawnCards);
+            privateResponse.put("totalCardsInHand", currentCards.size());
+
+            // Send private details only to the drawing player
+            sendToPlayer(currentPlayer.getId(), privateResponse);
+
+            // Create public response without card details for all players
+            Map<String, Object> publicResponse = new HashMap<>();
+            publicResponse.put("type", "DRAW_SUCCESS_PUBLIC");
+            publicResponse.put("playerName", currentPlayer.getName());
+            publicResponse.put("playerId", currentPlayer.getId());
+            publicResponse.put("cardsDrawn", drawnCards.size());
+            publicResponse.put("totalCardsInHand", currentCards.size());
+
+            // Broadcast public draw result to all players
+            messagingTemplate.convertAndSend("/topic/game/updates", publicResponse);
+            
+            // Also broadcast updated game state
+            broadcastGameUpdate(gameService.getGameState());
+            
+        } catch (IllegalStateException e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "DRAW_ERROR:" + e.getMessage());
+        } catch(Exception e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "DRAW_ERROR:An error occurred while drawing cards");
         }
     }
 
