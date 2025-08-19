@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monopoly Deal - WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin: 10px 0; }
+        input, button { margin: 5px; padding: 5px; }
+        .message { margin: 5px 0; padding: 5px; background: #f5f5f5; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Monopoly Deal - WebSocket Test</h1>
+    
+    <div>
+        <button id="connectBtn" onclick="connect()">Connect</button>
+        <button id="disconnectBtn" onclick="disconnect()" disabled>Disconnect</button>
+    </div>
+    
+    <div>
+        <input type="text" id="playerName" placeholder="Enter your name" value="Player1">
+        <button onclick="joinGame()" disabled id="joinBtn">Join Game</button>
+    </div>
+    
+    <div id="gameSection" style="display: none;">
+        <h3>Connected Players</h3>
+        <ul id="playerList"></ul>
+        <button onclick="startGame()" id="startBtn" disabled>Start Game</button>
+        <div id="gameStatus"></div>
+    </div>
+    
+    <div id="gameplaySection" style="display: none;">
+        <h3>Game Controls</h3>
+        <div id="currentPlayerInfo"></div>
+        <button onclick="drawCards()" id="drawBtn" disabled>Draw Cards</button>
+        <div id="drawResult"></div>
+        <div id="playerHand">
+            <h4>Your Hand:</h4>
+            <ul id="handList"></ul>
+        </div>
+    </div>
+    
+    <div id="messages"></div>
+    
+    <script>
+        var stompClient = null;
+        var connectedPlayers = [];
+        var gameStateRefreshInterval = null;
+        
+        function connect() {
+            var socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                document.getElementById('connectBtn').disabled = true;
+                document.getElementById('disconnectBtn').disabled = false;
+                document.getElementById('joinBtn').disabled = false;
+                
+                // Subscribe to game updates
+                stompClient.subscribe('/topic/game/updates', function(message) {
+                    var messageBody = message.body;
+                    
+                    // Handle different types of messages
+                    if (messageBody.includes('joined the game!')) {
+                        // Handle player join messages
+                        var playerName = messageBody.replace(' joined the game!', '');
+                        if (!connectedPlayers.includes(playerName)) {
+                            connectedPlayers.push(playerName);
+                            updatePlayerList();
+                            document.getElementById('gameSection').style.display = 'block';
+                            updateStartButton();
+                        }
+                        showMessage('Game Update', messageBody);
+                    } else if (messageBody.startsWith('GAME_STARTED:')) {
+                        // Handle game start confirmation
+                        var players = messageBody.replace('GAME_STARTED:', '').split(',');
+                        handleGameStarted(players);
+                        showMessage('System', 'Game started successfully with players: ' + players.join(', '));
+                    } else if (messageBody.startsWith('GAME_START_ERROR:')) {
+                        // Handle game start error
+                        var error = messageBody.replace('GAME_START_ERROR:', '');
+                        showMessage('Error', 'Failed to start game: ' + error);
+                        document.getElementById('startBtn').disabled = false; // Re-enable button on error
+                    } else {
+                        // Handle other messages (like game state updates)
+                        try {
+                            var gameState = JSON.parse(messageBody);
+                            handleGameStateUpdate(gameState);
+                        } catch (e) {
+                            // If not JSON, treat as regular message
+                            showMessage('Game Update', messageBody);
+                        }
+                    }
+                });
+                
+                showMessage('System', 'Connected to WebSocket');
+            });
+        }
+        
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            document.getElementById('connectBtn').disabled = false;
+            document.getElementById('disconnectBtn').disabled = true;
+            document.getElementById('joinBtn').disabled = true;
+            
+            // Clear game state refresh interval
+            if (gameStateRefreshInterval) {
+                clearInterval(gameStateRefreshInterval);
+                gameStateRefreshInterval = null;
+            }
+            
+            showMessage('System', 'Disconnected from WebSocket');
+            console.log("Disconnected");
+        }
+        
+        function joinGame() {
+            var playerName = document.getElementById('playerName').value;
+            if (playerName && stompClient) {
+                stompClient.send("/app/game/join", {}, playerName);
+                showMessage('You', 'Joined game as ' + playerName);
+                
+                // Add player to list and show game section
+                if (!connectedPlayers.includes(playerName)) {
+                    connectedPlayers.push(playerName);
+                    updatePlayerList();
+                    document.getElementById('gameSection').style.display = 'block';
+                    updateStartButton();
+                }
+            }
+        }
+        
+        function updatePlayerList() {
+            var playerList = document.getElementById('playerList');
+            playerList.innerHTML = '';
+            connectedPlayers.forEach(function(player) {
+                var li = document.createElement('li');
+                li.textContent = player;
+                playerList.appendChild(li);
+            });
+        }
+        
+        function updateStartButton() {
+            var startBtn = document.getElementById('startBtn');
+            startBtn.disabled = connectedPlayers.length < 2;
+        }
+        
+        function startGame() {
+            if (connectedPlayers.length >= 2 && stompClient) {
+                // Send start game message via WebSocket
+                stompClient.send("/app/game/start", {}, JSON.stringify(connectedPlayers));
+                
+                // Disable the button immediately to prevent multiple starts
+                document.getElementById('startBtn').disabled = true;
+                showMessage('System', 'Starting game with players: ' + connectedPlayers.join(', '));
+            }
+        }
+        
+        function drawCards() {
+            // Check if it's the player's turn before making the request
+            let myPlayerName = document.getElementById('playerName').value;
+            
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    let currentPlayerName = gameState.currentPlayer.name;
+                    let isMyTurn = currentPlayerName === myPlayerName;
+                    
+                    if (!isMyTurn) {
+                        showMessage('Error', 'It is not your turn! Current player: ' + currentPlayerName);
+                        return;
+                    }
+                    
+                    // Proceed with drawing cards
+                    if (stompClient) {
+                        fetch('/game/draw', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('drawResult').innerHTML = 
+                                '<strong>Draw Result:</strong> ' + data.playerName + ' drew ' + data.drawnCards.length + ' cards. Total cards: ' + data.totalCardsInHand;
+                            
+                            // Show drawn cards
+                            let drawnCardsHtml = '<strong>Cards drawn:</strong><ul>';
+                            data.drawnCards.forEach(card => {
+                                drawnCardsHtml += '<li>' + card.name + ' (' + card.type + ')</li>';
+                            });
+                            drawnCardsHtml += '</ul>';
+                            document.getElementById('drawResult').innerHTML += drawnCardsHtml;
+                            
+                            showMessage('System', data.playerName + ' drew ' + data.drawnCards.length + ' cards');
+                            updatePlayerHand();
+                            updateCurrentPlayerInfo(); // Refresh turn info after drawing
+                        })
+                        .catch(error => {
+                            showMessage('Error', 'Failed to draw cards: ' + error);
+                        });
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error', 'Could not verify turn: ' + error);
+                });
+        }
+        
+        function updateCurrentPlayerInfo() {
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    let currentPlayerName = gameState.currentPlayer.name;
+                    let myPlayerName = document.getElementById('playerName').value;
+                    let isMyTurn = currentPlayerName === myPlayerName;
+                    
+                    document.getElementById('currentPlayerInfo').innerHTML = 
+                        '<strong>Current Player:</strong> ' + currentPlayerName + 
+                        ' | <strong>Phase:</strong> ' + gameState.currentPhase +
+                        (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>');
+                    
+                    // Enable/disable draw button based on turn
+                    document.getElementById('drawBtn').disabled = !isMyTurn;
+                })
+                .catch(error => {
+                    console.log('Could not fetch game state:', error);
+                });
+        }
+        
+        function updatePlayerHand() {
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    let currentPlayerName = document.getElementById('playerName').value;
+                    let currentPlayer = gameState.players.find(p => p.name === currentPlayerName);
+                    
+                    if (currentPlayer) {
+                        let handList = document.getElementById('handList');
+                        handList.innerHTML = '';
+                        currentPlayer.hand.forEach(card => {
+                            let li = document.createElement('li');
+                            li.textContent = card.name + ' (' + card.type + ')';
+                            handList.appendChild(li);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log('Could not update hand:', error);
+                });
+        }
+        
+        function handleGameStarted(players) {
+            document.getElementById('gameStatus').innerHTML = '<strong>Game Status:</strong> Game started successfully';
+            document.getElementById('gameplaySection').style.display = 'block';
+            
+            // Start periodic refresh of game state
+            gameStateRefreshInterval = setInterval(updateCurrentPlayerInfo, 3000);
+            
+            // Update player info immediately
+            setTimeout(updateCurrentPlayerInfo, 500); // Small delay to ensure backend is ready
+        }
+        
+        function handleGameStateUpdate(gameState) {
+            if (gameState && gameState.currentPlayer) {
+                let currentPlayerName = gameState.currentPlayer.name;
+                let myPlayerName = document.getElementById('playerName').value;
+                let isMyTurn = currentPlayerName === myPlayerName;
+                
+                document.getElementById('currentPlayerInfo').innerHTML = 
+                    '<strong>Current Player:</strong> ' + currentPlayerName + 
+                    ' | <strong>Phase:</strong> ' + gameState.currentPhase +
+                    (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>');
+                
+                // Enable/disable draw button based on turn
+                document.getElementById('drawBtn').disabled = !isMyTurn;
+                
+                // Update hand if it's this player
+                let currentPlayer = gameState.players.find(p => p.name === myPlayerName);
+                if (currentPlayer) {
+                    let handList = document.getElementById('handList');
+                    handList.innerHTML = '';
+                    currentPlayer.hand.forEach(card => {
+                        let li = document.createElement('li');
+                        li.textContent = card.name + ' (' + card.type + ')';
+                        handList.appendChild(li);
+                    });
+                }
+            }
+        }
+        
+        function showMessage(sender, message) {
+            var messagesDiv = document.getElementById('messages');
+            var messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = '<strong>' + sender + ':</strong> ' + message;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>

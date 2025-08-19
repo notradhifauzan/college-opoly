@@ -7,9 +7,11 @@ import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.service.context.ActionContext;
 import com.monopoly_deal.v1.service.strategies.CardActionStrategy;
 import com.monopoly_deal.v1.service.strategies.CardActionStrategyFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CardActionService {
 
 

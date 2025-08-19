@@ -2,6 +2,7 @@ package com.monopoly_deal.v1.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.monopoly_deal.v1.engine.GameEngine;
@@ -18,8 +19,9 @@ public class GameService {
     private final GameEngine gameEngine;
     private final TurnManager turnManager;
 
-    public GameService() {
-        this.gameEngine = new GameEngine();
+    @Autowired
+    public GameService(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
         this.turnManager = new TurnManager();
     }
 

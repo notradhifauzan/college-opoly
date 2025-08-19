@@ -1,16 +1,28 @@
 package com.monopoly_deal.v1.engine;
 
 import com.monopoly_deal.v1.enums.GamePhase;
+import com.monopoly_deal.v1.events.*;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.model.PropertySet;
 import com.monopoly_deal.v1.service.CardActionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class GameEngine {
     private final TurnManager turnManager = new TurnManager();
-    private final CardActionService cardActionService = new CardActionService();
+    private final CardActionService cardActionService;
+    private final ApplicationEventPublisher eventPublisher;
+    
+    @Autowired
+    public GameEngine(CardActionService cardActionService, ApplicationEventPublisher eventPublisher) {
+        this.cardActionService = cardActionService;
+        this.eventPublisher = eventPublisher;
+    }
 
     public void startGame(GameState gameState) {
         // each player draws 5 cards initially
@@ -22,6 +34,9 @@ public class GameEngine {
 
         // start the first turn
         turnManager.startTurn(gameState);
+        
+        // publish game started event
+        eventPublisher.publishEvent(new GameStartedEvent(this, "game1", gameState.getPlayers().size()));
     }
 
     public void drawCard(GameState gameState, Player player, boolean isSetup) {
@@ -61,11 +76,18 @@ public class GameEngine {
         }
 
         cardActionService.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
+        
+        // publish card played event
+        eventPublisher.publishEvent(new CardPlayedEvent(this, "game1", player.getName(), card.getName()));
+        
         checkWinCondition(gameState);
     }
 
     public void endTurn(GameState gameState) {
         turnManager.endTurn(gameState);
+        
+        // publish turn ended event
+        eventPublisher.publishEvent(new TurnEndedEvent(this, "game1", gameState.getCurrentPlayer().getName()));
     }
 
     public boolean checkWinCondition(GameState gameState) {
@@ -77,6 +99,10 @@ public class GameEngine {
             if(completeSets >= 3){
                 gameState.setGameOver(true);
                 System.out.println(player.getName() + " Wins the game!");
+                
+                // publish game won event
+                eventPublisher.publishEvent(new GameWonEvent(this, "game1", player.getName()));
+                
                 return true;
             }
         }

@@ -61,6 +61,11 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.19.0</version>
 		</dependency>
+		<!-- WebSocket dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
