@@ -56,7 +56,7 @@ sequenceDiagram
 
     %% Step 6: Players B and C Respond Independently %%
     Note over ClientB, ClientC: B and C can respond at different times. The server handles them as they arrive.
-    
+
     ClientB->>+Server: Sends WebSocket Message (action: "respondToRent", paymentCards)
     Server->>Server: 1. Server receives B's payment.
     Server->>Server: 2. Validates payment against B's PendingAction.
