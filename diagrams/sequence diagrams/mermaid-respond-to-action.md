@@ -28,7 +28,8 @@ sequenceDiagram
     ClientB->>+Server: POST /game/respond (responseTo=action123, payment)
     end
 
-    GameState: == Action Resolution ==
+    rect rgb(230, 255, 230)
+    note over Server, GameState: == Action Resolution ==
     Server->>GameState: findPendingActionById(action123)
     GameState-->>Server: return action123
 

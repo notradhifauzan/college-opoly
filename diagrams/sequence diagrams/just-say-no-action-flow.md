@@ -26,7 +26,7 @@ sequenceDiagram
     %% --- Step 2: Player B Counters with "Just Say No" --- %%
     Note over ClientB: Player B chooses to play their 'Just Say No' card.
     ClientB->>+Server: Sends WS Message (action: "playCard", card: JustSayNo, target: A)
-    
+
     Server->>Server: 1. Validate B can play this card.
     Server->>Server: 2. This is a counter. Clear the RENT_PAYMENT action.
     Server->>Server: 3. Create NEW PendingAction(type: COUNTER_RESPONSE, from: B, to: A, originalAction: Rent)

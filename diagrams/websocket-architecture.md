@@ -44,7 +44,7 @@ graph TB
 
     GC --> GS
     GS --> GE
-    
+
     GE --> EP
     EP -.-> |Publishes| GSE
     EP -.-> |Publishes| CPE
