@@ -9,6 +9,186 @@
         #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin: 10px 0; }
         input, button { margin: 5px; padding: 5px; }
         .message { margin: 5px 0; padding: 5px; background: #f5f5f5; border-radius: 3px; }
+        
+        /* Player Deck Styling */
+        #playerDeck { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            background: #f0f8ff; 
+        }
+        
+        #playerBank { 
+            margin-bottom: 15px; 
+        }
+        
+        #bankCards, #propertySets { 
+            max-height: 150px; 
+            overflow-y: auto; 
+        }
+        
+        .property-set { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 5px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        
+        .bank-card { 
+            display: inline-block; 
+            margin: 5px; 
+            padding: 8px; 
+            border: 1px solid #999; 
+            border-radius: 5px; 
+            background: #fff; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2); 
+            text-align: center; 
+            min-width: 60px; 
+        }
+        
+        /* Player Hand Styling */
+        #playerHand { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 2px solid #333; 
+            border-radius: 8px; 
+            background: #fff8dc; 
+        }
+        
+        #handList { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            max-height: 120px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+        }
+        
+        #handList li { 
+            margin: 0 !important; 
+        }
+        
+        .hand-card-button { 
+            padding: 8px 12px; 
+            border: 1px solid #666; 
+            border-radius: 5px; 
+            background: #fff; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            cursor: pointer; 
+            font-size: 12px; 
+            transition: all 0.2s ease; 
+            min-width: 80px; 
+            text-align: center; 
+        }
+        
+        .hand-card-button:hover:not(:disabled) { 
+            background: #e6f3ff; 
+            transform: translateY(-1px); 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+        }
+        
+        .hand-card-button:disabled { 
+            background: #f0f0f0; 
+            color: #999; 
+            cursor: not-allowed; 
+            opacity: 0.6; 
+        }
+        
+        /* Play Card Section within Hand */
+        #cardPlaySection { 
+            background: rgba(255,255,255,0.8); 
+            border-radius: 5px; 
+            padding: 10px; 
+        }
+        
+        #cardPlaySection h5 { 
+            margin: 0 0 10px 0; 
+            color: #333; 
+            font-size: 14px; 
+        }
+        
+        #cardPlaySection h6 { 
+            margin: 5px 0; 
+            color: #555; 
+            font-size: 12px; 
+        }
+        
+        #targetPlayersList label { 
+            display: block; 
+            margin: 5px 0; 
+            font-size: 12px; 
+        }
+        
+        #playCardBtn, #cancelPlayBtn { 
+            padding: 6px 12px; 
+            margin: 0 5px 5px 0; 
+            border: 1px solid #666; 
+            border-radius: 4px; 
+            background: #fff; 
+            cursor: pointer; 
+            font-size: 12px; 
+        }
+        
+        #playCardBtn:hover:not(:disabled) { 
+            background: #e6f3ff; 
+        }
+        
+        #cancelPlayBtn:hover:not(:disabled) { 
+            background: #ffe6e6; 
+        }
+        
+        #playCardBtn:disabled, #cancelPlayBtn:disabled { 
+            background: #f0f0f0; 
+            color: #999; 
+            cursor: not-allowed; 
+        }
+        
+        /* Selected Card Preview */
+        #selectedCardPreview { 
+            text-align: center; 
+            min-height: 60px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        
+        #selectedCardName { 
+            font-size: 14px; 
+            display: block; 
+        }
+        
+        .property-card-preview { 
+            background: linear-gradient(135deg, #4CAF50, #45a049) !important; 
+            color: white !important; 
+            border-color: #2e7d32 !important; 
+        }
+        
+        .action-card-preview { 
+            background: linear-gradient(135deg, #FF9800, #F57C00) !important; 
+            color: white !important; 
+            border-color: #E65100 !important; 
+        }
+        
+        .rent-card-preview { 
+            background: linear-gradient(135deg, #F44336, #D32F2F) !important; 
+            color: white !important; 
+            border-color: #B71C1C !important; 
+        }
+        
+        .money-card-preview { 
+            background: linear-gradient(135deg, #2196F3, #1976D2) !important; 
+            color: white !important; 
+            border-color: #0D47A1 !important; 
+        }
+        
+        .wild-card-preview { 
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2) !important; 
+            color: white !important; 
+            border-color: #4A148C !important; 
+        }
     </style>
 </head>
 <body>
@@ -34,11 +214,63 @@
     <div id="gameplaySection" style="display: none;">
         <h3>Game Controls</h3>
         <div id="currentPlayerInfo"></div>
-        <button onclick="drawCards()" id="drawBtn" disabled>Draw Cards</button>
+        <div style="margin: 10px 0;">
+            <button onclick="drawCards()" id="drawBtn" disabled>Draw Cards</button>
+            <button onclick="endTurn()" id="endTurnBtn" disabled style="margin-left: 10px;">End Turn</button>
+        </div>
         <div id="drawResult"></div>
         <div id="playerHand">
             <h4>Your Hand:</h4>
             <ul id="handList"></ul>
+            
+            <div id="cardPlaySection" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;">
+                <h5>Play Selected Card</h5>
+                
+                <div id="selectedCardPreview" style="margin: 10px 0; padding: 10px; border: 2px solid #333; border-radius: 5px; background: #f0f0f0;">
+                    <div id="selectedCardInfo">
+                        <strong id="selectedCardName">No card selected</strong>
+                        <div id="selectedCardType" style="font-size: 11px; color: #666; margin-top: 2px;">-</div>
+                        <div id="selectedCardValue" style="font-size: 11px; color: #666; margin-top: 2px; display: none;">Value: $<span id="cardValue">0</span></div>
+                    </div>
+                </div>
+                
+                <div style="margin: 10px 0;">
+                    <label>
+                        <input type="checkbox" id="playAsMoneyCheckbox"> Play as Money
+                    </label>
+                    <div id="moneyPlayInfo" style="font-size: 11px; color: #666; margin-top: 3px; display: none;">
+                        This card will be added to your money bank
+                    </div>
+                </div>
+                
+                <div id="targetPlayersSection" style="display: none; margin: 10px 0;">
+                    <h6>Target Players:</h6>
+                    <div id="targetPlayersList"></div>
+                </div>
+                
+                <div style="margin-top: 10px;">
+                    <button onclick="confirmPlayCard()" id="playCardBtn" disabled>Play Selected Card</button>
+                    <button onclick="cancelCardPlay()" id="cancelPlayBtn" disabled>Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="playerDeck" style="display: none;">
+            <h4>Your Deck Area:</h4>
+            
+            <div id="playerBank">
+                <h5>Money Bank (Value: $<span id="bankValue">0</span>)</h5>
+                <div id="bankCards" style="border: 1px solid #ccc; padding: 10px; min-height: 50px; background: #f9f9f9;">
+                    <em>No money cards yet</em>
+                </div>
+            </div>
+            
+            <div id="playerProperties" style="margin-top: 15px;">
+                <h5>Property Sets</h5>
+                <div id="propertySets" style="border: 1px solid #ccc; padding: 10px; min-height: 100px; background: #f9f9f9;">
+                    <em>No property sets yet</em>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -49,6 +281,8 @@
         var connectedPlayers = [];
         var gameStateRefreshInterval = null;
         var myPlayerId = null;
+        var selectedCard = null;
+        var allPlayers = [];
         
         function connect() {
             var socket = new SockJS('/ws');
@@ -89,6 +323,14 @@
                         // Handle draw card error
                         var error = messageBody.replace('DRAW_ERROR:', '');
                         showMessage('Error', 'Failed to draw cards: ' + error);
+                    } else if (messageBody.startsWith('PLAY_ERROR:')) {
+                        // Handle play card error
+                        var error = messageBody.replace('PLAY_ERROR:', '');
+                        showMessage('Error', 'Failed to play card: ' + error);
+                    } else if (messageBody.startsWith('TURN_ERROR:')) {
+                        // Handle end turn error
+                        var error = messageBody.replace('TURN_ERROR:', '');
+                        showMessage('Error', 'Failed to end turn: ' + error);
                     } else {
                         // Handle other messages (like game state updates or draw results)
                         try {
@@ -202,6 +444,37 @@
                 });
         }
         
+        function endTurn() {
+            // Check if it's the player's turn before ending it
+            let myPlayerName = document.getElementById('playerName').value;
+            
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    let currentPlayerName = gameState.currentPlayer.name;
+                    let isMyTurn = currentPlayerName === myPlayerName;
+                    
+                    if (!isMyTurn) {
+                        showMessage('Error', 'It is not your turn! Current player: ' + currentPlayerName);
+                        return;
+                    }
+                    
+                    if (gameState.currentPhase === 'DRAW_PHASE') {
+                        showMessage('Error', 'You must draw cards before ending your turn!');
+                        return;
+                    }
+                    
+                    // Proceed with ending turn via WebSocket
+                    if (stompClient) {
+                        stompClient.send("/app/game/end-turn", {}, {});
+                        showMessage('You', 'Ending turn...');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error', 'Could not verify turn: ' + error);
+                });
+        }
+        
         function updateCurrentPlayerInfo() {
             fetch('/game/state')
                 .then(response => response.json())
@@ -210,13 +483,21 @@
                     let myPlayerName = document.getElementById('playerName').value;
                     let isMyTurn = currentPlayerName === myPlayerName;
                     
+                    let phaseColor = gameState.currentPhase === 'DRAW_PHASE' ? 'orange' : 'blue';
                     document.getElementById('currentPlayerInfo').innerHTML = 
                         '<strong>Current Player:</strong> ' + currentPlayerName + 
-                        ' | <strong>Phase:</strong> ' + gameState.currentPhase +
-                        (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>');
+                        ' | <strong>Phase:</strong> <span style="color: ' + phaseColor + ';">' + gameState.currentPhase + '</span>' +
+                        (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>') +
+                        (isMyTurn && gameState.currentPhase === 'DRAW_PHASE' ? 
+                         ' | <em>Draw cards to proceed to play phase</em>' : '') +
+                        (isMyTurn && gameState.currentPhase === 'PLAY_PHASE' ? 
+                         ' | <em>You can play cards or end your turn</em>' : '');
                     
-                    // Enable/disable draw button based on turn
-                    document.getElementById('drawBtn').disabled = !isMyTurn;
+                    // Enable/disable draw button based on turn and phase
+                    document.getElementById('drawBtn').disabled = !isMyTurn || gameState.currentPhase !== 'DRAW_PHASE';
+                    
+                    // Enable/disable end turn button based on turn and phase
+                    document.getElementById('endTurnBtn').disabled = !isMyTurn || gameState.currentPhase !== 'PLAY_PHASE';
                 })
                 .catch(error => {
                     console.log('Could not fetch game state:', error);
@@ -233,11 +514,25 @@
                     if (currentPlayer) {
                         let handList = document.getElementById('handList');
                         handList.innerHTML = '';
+                        let isMyTurn = gameState.currentPlayer && gameState.currentPlayer.name === currentPlayerName;
+                        
                         currentPlayer.hand.forEach(card => {
                             let li = document.createElement('li');
-                            li.textContent = card.name + ' (' + card.type + ')';
+                            let canPlayCard = isMyTurn && gameState.currentPhase === 'PLAY_PHASE';
+                            
+                            let button = document.createElement('button');
+                            button.className = 'hand-card-button';
+                            button.disabled = !canPlayCard;
+                            button.onclick = function() { selectCardForPlay(card); };
+                            button.innerHTML = '<div style="font-weight: bold;">' + card.name + '</div>' +
+                                              '<div style="font-size: 10px; color: #666;">' + getCardTypeDisplay(card.type) + '</div>';
+                            
+                            li.appendChild(button);
                             handList.appendChild(li);
                         });
+                        
+                        // Update player deck (bank and property sets)
+                        updatePlayerDeck(gameState);
                     }
                 })
                 .catch(error => {
@@ -245,15 +540,41 @@
                 });
         }
         
+        function fetchAndUpdateGameState() {
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    handleGameStateUpdate(gameState);
+                })
+                .catch(error => {
+                    console.log('Could not fetch game state:', error);
+                });
+        }
+        
         function handleGameStarted(players) {
-            document.getElementById('gameStatus').innerHTML = '<strong>Game Status:</strong> Game started successfully';
+            document.getElementById('gameStatus').innerHTML = '<strong>Game Status:</strong> Game started successfully! Initial hands have been dealt.';
             document.getElementById('gameplaySection').style.display = 'block';
             
-            // Start periodic refresh of game state
-            gameStateRefreshInterval = setInterval(updateCurrentPlayerInfo, 3000);
+            // Show loading message for hand
+            document.getElementById('handList').innerHTML = '<li><em>Loading your hand...</em></li>';
             
-            // Update player info immediately
-            setTimeout(updateCurrentPlayerInfo, 500); // Small delay to ensure backend is ready
+            // Start periodic refresh of game state and hand
+            gameStateRefreshInterval = setInterval(() => {
+                updateCurrentPlayerInfo();
+                updatePlayerHand();
+            }, 3000);
+            
+            // Update player info and hand immediately with multiple attempts
+            setTimeout(() => {
+                updateCurrentPlayerInfo();
+                updatePlayerHand();
+                fetchAndUpdateGameState();
+            }, 500);
+            
+            // Backup refresh in case the first one fails
+            setTimeout(() => {
+                fetchAndUpdateGameState();
+            }, 1500);
         }
         
         function handleDrawSuccessPrivate(drawData) {
@@ -289,13 +610,24 @@
                 let myPlayerName = document.getElementById('playerName').value;
                 let isMyTurn = currentPlayerName === myPlayerName;
                 
+                // Store all players for target selection
+                allPlayers = gameState.players;
+                
+                let phaseColor = gameState.currentPhase === 'DRAW_PHASE' ? 'orange' : 'blue';
                 document.getElementById('currentPlayerInfo').innerHTML = 
                     '<strong>Current Player:</strong> ' + currentPlayerName + 
-                    ' | <strong>Phase:</strong> ' + gameState.currentPhase +
-                    (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>');
+                    ' | <strong>Phase:</strong> <span style="color: ' + phaseColor + ';">' + gameState.currentPhase + '</span>' +
+                    (isMyTurn ? ' | <span style="color: green;">YOUR TURN</span>' : ' | <span style="color: red;">NOT YOUR TURN</span>') +
+                    (isMyTurn && gameState.currentPhase === 'DRAW_PHASE' ? 
+                     ' | <em>Draw cards to proceed to play phase</em>' : '') +
+                    (isMyTurn && gameState.currentPhase === 'PLAY_PHASE' ? 
+                     ' | <em>You can play cards or end your turn</em>' : '');
                 
-                // Enable/disable draw button based on turn
-                document.getElementById('drawBtn').disabled = !isMyTurn;
+                // Enable/disable draw button based on turn and phase
+                document.getElementById('drawBtn').disabled = !isMyTurn || gameState.currentPhase !== 'DRAW_PHASE';
+                
+                // Enable/disable end turn button based on turn and phase
+                document.getElementById('endTurnBtn').disabled = !isMyTurn || gameState.currentPhase !== 'PLAY_PHASE';
                 
                 // Update hand and set up private messaging if it's this player
                 let currentPlayer = gameState.players.find(p => p.name === myPlayerName);
@@ -310,10 +642,17 @@
                     handList.innerHTML = '';
                     currentPlayer.hand.forEach(card => {
                         let li = document.createElement('li');
-                        li.textContent = card.name + ' (' + card.type + ')';
+                        let canPlayCard = isMyTurn && gameState.currentPhase === 'PLAY_PHASE';
+                        li.innerHTML = '<button onclick="selectCardForPlay(' + JSON.stringify(card).replace(/"/g, '&quot;') + ')" ' +
+                                      (canPlayCard ? '' : 'disabled') + '>' + 
+                                      card.name + ' (' + card.type + ')</button>';
+                        li.style.margin = '5px 0';
                         handList.appendChild(li);
                     });
                 }
+                
+                // Update player deck (bank and property sets)
+                updatePlayerDeck(gameState);
             }
         }
         
@@ -340,6 +679,297 @@
             messageDiv.innerHTML = '<strong>' + sender + ':</strong> ' + message;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function selectCardForPlay(card) {
+            // Check current game phase before allowing card selection
+            fetch('/game/state')
+                .then(response => response.json())
+                .then(gameState => {
+                    let myPlayerName = document.getElementById('playerName').value;
+                    let isMyTurn = gameState.currentPlayer && gameState.currentPlayer.name === myPlayerName;
+                    let canPlayCard = isMyTurn && gameState.currentPhase === 'PLAY_PHASE';
+                    
+                    if (!canPlayCard) {
+                        if (!isMyTurn) {
+                            showMessage('Error', 'It is not your turn! Current player: ' + gameState.currentPlayer.name);
+                        } else if (gameState.currentPhase === 'DRAW_PHASE') {
+                            showMessage('Error', 'You must draw cards first before playing cards!');
+                        }
+                        return;
+                    }
+                    
+                    selectedCard = card;
+                    document.getElementById('cardPlaySection').style.display = 'block';
+                    document.getElementById('playCardBtn').disabled = false;
+                    document.getElementById('cancelPlayBtn').disabled = false;
+                    
+                    // Update card preview with selected card info
+                    updateSelectedCardPreview(card);
+                    
+                    // Update target players based on card type
+                    updateTargetPlayersSection(card);
+                    
+                    // Show/hide play as money option and info
+                    updatePlayAsMoneyOptions(card);
+                    
+                    showMessage('System', 'Selected card: ' + card.name + ' for playing');
+                })
+                .catch(error => {
+                    showMessage('Error', 'Could not verify game state');
+                });
+        }
+        
+        function updateTargetPlayersSection(card) {
+            var targetSection = document.getElementById('targetPlayersSection');
+            var targetPlayersList = document.getElementById('targetPlayersList');
+            
+            // Show target players section for action/rent cards that might need targets
+            if (card.type === 'ACTION_CARD' || card.type === 'RENT_CARD') {
+                targetSection.style.display = 'block';
+                targetPlayersList.innerHTML = '';
+                
+                // Add checkboxes for each other player
+                var myPlayerName = document.getElementById('playerName').value;
+                allPlayers.forEach(player => {
+                    if (player.name !== myPlayerName) {
+                        var label = document.createElement('label');
+                        label.innerHTML = '<input type="checkbox" value="' + player.id + '"> ' + player.name;
+                        label.style.display = 'block';
+                        targetPlayersList.appendChild(label);
+                    }
+                });
+            } else {
+                targetSection.style.display = 'none';
+            }
+        }
+        
+        function confirmPlayCard() {
+            if (!selectedCard) {
+                showMessage('Error', 'No card selected');
+                return;
+            }
+            
+            var playAsMoney = document.getElementById('playAsMoneyCheckbox').checked;
+            var targetPlayerIds = [];
+            
+            // Get selected target players
+            var checkboxes = document.querySelectorAll('#targetPlayersList input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                targetPlayerIds.push(checkbox.value);
+            });
+            
+            var playCardRequest = {
+                cardId: selectedCard.id,
+                playAsMoney: playAsMoney,
+                targetPlayerIds: targetPlayerIds
+            };
+            
+            if (stompClient) {
+                stompClient.send("/app/game/play-card", {}, JSON.stringify(playCardRequest));
+                showMessage('You', 'Playing card: ' + selectedCard.name);
+                cancelCardPlay();
+            }
+        }
+        
+        function cancelCardPlay() {
+            selectedCard = null;
+            document.getElementById('cardPlaySection').style.display = 'none';
+            document.getElementById('playCardBtn').disabled = true;
+            document.getElementById('cancelPlayBtn').disabled = true;
+            document.getElementById('playAsMoneyCheckbox').checked = false;
+            document.getElementById('targetPlayersList').innerHTML = '';
+            
+            // Reset card preview
+            resetCardPreview();
+        }
+        
+        function resetCardPreview() {
+            document.getElementById('selectedCardName').textContent = 'No card selected';
+            document.getElementById('selectedCardType').textContent = '-';
+            document.getElementById('selectedCardValue').style.display = 'none';
+            document.getElementById('moneyPlayInfo').style.display = 'none';
+            
+            const previewElement = document.getElementById('selectedCardPreview');
+            previewElement.classList.remove('property-card-preview', 'action-card-preview', 'rent-card-preview', 'money-card-preview', 'wild-card-preview');
+        }
+        
+        function updatePlayerDeck(gameState) {
+            let myPlayerName = document.getElementById('playerName').value;
+            let currentPlayer = gameState.players.find(p => p.name === myPlayerName);
+            
+            if (currentPlayer) {
+                // Show the deck section once we have player data
+                document.getElementById('playerDeck').style.display = 'block';
+                
+                updatePlayerBank(currentPlayer.bank);
+                updatePlayerPropertySets(currentPlayer.propertySets);
+            }
+        }
+        
+        function updatePlayerBank(bankCards) {
+            let bankValue = 0;
+            let bankCardsDiv = document.getElementById('bankCards');
+            
+            if (bankCards && bankCards.length > 0) {
+                bankCardsDiv.innerHTML = '';
+                
+                bankCards.forEach(card => {
+                    bankValue += card.value || 0;
+                    
+                    let cardDiv = document.createElement('div');
+                    cardDiv.className = 'bank-card';
+                    cardDiv.innerHTML = '<strong>' + card.name + '</strong><br/>$' + (card.value || 0);
+                    
+                    bankCardsDiv.appendChild(cardDiv);
+                });
+            } else {
+                bankCardsDiv.innerHTML = '<em>No money cards yet</em>';
+            }
+            
+            document.getElementById('bankValue').textContent = bankValue;
+        }
+        
+        function updatePlayerPropertySets(propertySets) {
+            let propertySetsDiv = document.getElementById('propertySets');
+            
+            if (propertySets && propertySets.length > 0) {
+                propertySetsDiv.innerHTML = '';
+                
+                propertySets.forEach(propertySet => {
+                    let setDiv = document.createElement('div');
+                    setDiv.className = 'property-set';
+                    
+                    // Set background color based on property color
+                    let colorStyle = getPropertyColorStyle(propertySet.color);
+                    setDiv.style.backgroundColor = colorStyle.bg;
+                    setDiv.style.color = colorStyle.text;
+                    setDiv.style.border = '2px solid #333';
+                    
+                    let completionStatus = propertySet.complete ? 
+                        '<span style="color: green; font-weight: bold;">[COMPLETE SET]</span>' : 
+                        '<span style="color: orange;">[' + propertySet.cards.length + ' cards]</span>';
+                    
+                    setDiv.innerHTML = '<h6>' + propertySet.color + ' Properties ' + completionStatus + '</h6>';
+                    
+                    let cardsDiv = document.createElement('div');
+                    propertySet.cards.forEach(card => {
+                        let cardSpan = document.createElement('span');
+                        cardSpan.style.display = 'inline-block';
+                        cardSpan.style.margin = '2px';
+                        cardSpan.style.padding = '3px 6px';
+                        cardSpan.style.background = 'rgba(255,255,255,0.8)';
+                        cardSpan.style.border = '1px solid #666';
+                        cardSpan.style.borderRadius = '3px';
+                        cardSpan.style.fontSize = '12px';
+                        cardSpan.textContent = card.name;
+                        cardsDiv.appendChild(cardSpan);
+                    });
+                    
+                    setDiv.appendChild(cardsDiv);
+                    propertySetsDiv.appendChild(setDiv);
+                });
+            } else {
+                propertySetsDiv.innerHTML = '<em>No property sets yet</em>';
+            }
+        }
+        
+        function getPropertyColorStyle(color) {
+            const colorMap = {
+                'BROWN': { bg: 'rgba(139, 69, 19, 0.3)', text: '#5D4037' },
+                'LIGHT_BLUE': { bg: 'rgba(135, 206, 235, 0.4)', text: '#0277BD' },
+                'PINK': { bg: 'rgba(255, 192, 203, 0.5)', text: '#AD1457' },
+                'ORANGE': { bg: 'rgba(255, 165, 0, 0.4)', text: '#E65100' },
+                'RED': { bg: 'rgba(255, 0, 0, 0.3)', text: '#C62828' },
+                'YELLOW': { bg: 'rgba(255, 255, 0, 0.3)', text: '#F57F17' },
+                'GREEN': { bg: 'rgba(0, 128, 0, 0.3)', text: '#2E7D32' },
+                'DARK_BLUE': { bg: 'rgba(0, 0, 139, 0.3)', text: '#1565C0' },
+                'BLACK': { bg: 'rgba(0, 0, 0, 0.2)', text: '#212121' },
+                'LIGHT_GREEN': { bg: 'rgba(144, 238, 144, 0.5)', text: '#388E3C' }
+            };
+            
+            return colorMap[color] || { bg: 'rgba(224, 224, 224, 0.3)', text: '#616161' };
+        }
+        
+        function getCardTypeDisplay(cardType) {
+            const typeMap = {
+                'PROPERTY_CARD': 'Property',
+                'ACTION_CARD': 'Action',
+                'RENT_CARD': 'Rent',
+                'MONEY_CARD': 'Money',
+                'WILD_CARD': 'Wild'
+            };
+            
+            return typeMap[cardType] || cardType;
+        }
+        
+        function updateSelectedCardPreview(card) {
+            // Update card info
+            document.getElementById('selectedCardName').textContent = card.name;
+            document.getElementById('selectedCardType').textContent = getCardTypeDisplay(card.type);
+            
+            // Show/hide value based on card type
+            const valueElement = document.getElementById('selectedCardValue');
+            if (card.value && card.value > 0) {
+                document.getElementById('cardValue').textContent = card.value;
+                valueElement.style.display = 'block';
+            } else {
+                valueElement.style.display = 'none';
+            }
+            
+            // Update preview styling based on card type
+            const previewElement = document.getElementById('selectedCardPreview');
+            // Remove all card type classes
+            previewElement.classList.remove('property-card-preview', 'action-card-preview', 'rent-card-preview', 'money-card-preview', 'wild-card-preview');
+            
+            // Add appropriate class based on card type
+            switch(card.type) {
+                case 'PROPERTY_CARD':
+                    previewElement.classList.add('property-card-preview');
+                    break;
+                case 'ACTION_CARD':
+                    previewElement.classList.add('action-card-preview');
+                    break;
+                case 'RENT_CARD':
+                    previewElement.classList.add('rent-card-preview');
+                    break;
+                case 'MONEY_CARD':
+                    previewElement.classList.add('money-card-preview');
+                    break;
+                case 'WILD_CARD':
+                    previewElement.classList.add('wild-card-preview');
+                    break;
+            }
+        }
+        
+        function updatePlayAsMoneyOptions(card) {
+            const moneyInfo = document.getElementById('moneyPlayInfo');
+            const playAsMoneyCheckbox = document.getElementById('playAsMoneyCheckbox');
+            
+            // All cards can be played as money in Monopoly Deal
+            moneyInfo.style.display = 'block';
+            
+            // Add specific info based on card type
+            let infoText = 'This card will be added to your money bank';
+            if (card.value && card.value > 0) {
+                infoText += ' (Value: $' + card.value + ')';
+            }
+            
+            // Special messaging for different card types
+            if (card.type === 'MONEY_CARD') {
+                infoText = 'Money cards are typically played as money (Value: $' + (card.value || 0) + ')';
+            } else if (card.type === 'PROPERTY_CARD') {
+                infoText = 'Property cards can be played as money or added to property sets';
+            } else if (card.type === 'ACTION_CARD') {
+                infoText = 'Action cards can be played for their effect or as money';
+            } else if (card.type === 'RENT_CARD') {
+                infoText = 'Rent cards can charge other players or be played as money';
+            }
+            
+            moneyInfo.textContent = infoText;
+            
+            // Reset checkbox
+            playAsMoneyCheckbox.checked = false;
         }
     </script>
 </body>

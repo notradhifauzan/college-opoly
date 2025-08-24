@@ -1,3 +1,6 @@
+# Rent Card Play - Detailed Server Sequence
+
+```mermaid
 sequenceDiagram
     participant Client
     participant GameController
@@ -42,3 +45,4 @@ sequenceDiagram
     GameService-->>-GameController: return
     
     GameController-->>-Client: 200 OK (GameState with pending actions)
+```

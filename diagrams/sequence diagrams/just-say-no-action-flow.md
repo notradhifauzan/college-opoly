@@ -1,3 +1,6 @@
+# Just Say No Action Flow
+
+```mermaid
 sequenceDiagram
     participant ClientA as Player A's Client
     participant ClientB as Player B's Client
@@ -66,3 +69,4 @@ sequenceDiagram
     deactivate Server
 
     Note over ClientA, ClientB: Everyone's UI is now up-to-date. The turn can continue.
+```

@@ -13,6 +13,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
@@ -48,6 +49,44 @@ public class WebSocketController {
             return "GAME_STARTED:" + String.join(",", playerNames);
         } catch (Exception e) {
             return "GAME_START_ERROR:" + e.getMessage();
+        }
+    }
+
+     @MessageMapping("/game/end-turn")
+    public void endTurn() {
+        try {
+            if(gameService.getGameState() == null) {
+                messagingTemplate.convertAndSend("/topic/game/updates", "PLAY_ERROR:Game not started yet");
+                return;
+            }
+            gameService.endTurn();
+
+            // Broadcast game state to all players
+            broadcastGameUpdate(gameService.getGameState());
+        } catch (IllegalStateException e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "TURN_ERROR:" + e.getMessage());
+        } catch (Exception e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "TURN_ERROR:An error occurred while ending turn");
+        }
+    }
+
+    @MessageMapping("/game/play-card")
+    public void playCard(PlayCardRequest request) {
+         try {
+            if(gameService.getGameState() == null) {
+                messagingTemplate.convertAndSend("/topic/game/updates", "PLAY_ERROR:Game not started yet");
+                return;
+            }
+            
+            Player currentPlayer = gameService.getCurrentPlayer();
+            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney(), request.getTargetPlayerIds());
+            
+            // Also broadcast updated game state
+            broadcastGameUpdate(gameService.getGameState());
+        } catch (IllegalStateException e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "PLAY_ERROR:" + e.getMessage());
+        } catch(Exception e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "PLAY_ERROR:An error occurred while playing card");
         }
     }
 

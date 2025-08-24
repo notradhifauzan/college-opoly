@@ -2,6 +2,27 @@
 
 This document outlines the design for implementing interactive, player-to-player actions (e.g., Rent, Just Say No) in the Monopoly Deal game.
 
+## Current Progress Summary (2025-01-19)
+
+### ✅ Completed Features:
+1. **WebSocket Architecture Migration** - Successfully migrated from REST API to WebSocket-based communication
+2. **Game Start via WebSocket** - All players receive synchronized game start notifications
+3. **Card Drawing with Privacy** - Implemented private/public messaging system:
+   - Drawing player sees actual cards drawn (private message)
+   - Other players only see card count (public message)
+4. **Turn Validation** - Frontend validates player turns before allowing actions
+5. **Real-time Game State Updates** - All players receive synchronized game state via WebSocket
+
+### 🏗️ Architecture Updates:
+- **GameController** - Kept for reference but marked as ignored in CLAUDE.md
+- **WebSocketController** - Now handles all game interactions:
+  - `/app/game/start` - Start game with player list
+  - `/app/game/draw` - Draw cards with privacy protection
+- **Frontend** - Updated websocket-test.html with:
+  - Private message subscription per player (`/queue/player/{playerId}`)
+  - Public message handling (`/topic/game/updates`)
+  - Turn-based UI controls
+
 ### 1. The Core Problem
 
 The initial architecture was purely sequential, lacking a mechanism to handle game states where the engine must pause and wait for input from a specific player who is not the current turn-taker. This is a requirement for most action cards.
@@ -37,10 +58,22 @@ We finalized the design for the `PendingAction.java` class:
 - **Key Fields**: The class will include `actionId` (UUID), `targetPlayerId`, and `requestingPlayerId` to uniquely identify and route the action.
 - **Immutability**: All fields will be `final` to make the object immutable, which is a best practice that prevents a wide range of bugs.
 
-### 6. Implementation Plan
+### 6. Next Implementation Steps
 
-The agreed-upon implementation will start with the backend logic first:
+**Immediate Next Features to Implement:**
+1. **End Turn via WebSocket** - Complete the turn cycle
+2. **Play Card via WebSocket** - Allow playing cards with privacy
+3. **Game State Display** - Better UI for game state visualization
+
+**Future Advanced Features (PendingActions):**
+The original planned implementation for interactive actions:
 1. Create the `ActionType.java` enum.
 2. Create the `PendingAction.java` class.
 3. Add a `List<PendingAction>` field to `GameState.java`.
 4. Begin modifying the `CardActionStrategy` classes (starting with `RentCardStrategy`) to create and add `PendingAction` objects to the game state instead of processing the game event directly.
+
+**Current Architecture Benefits:**
+- ✅ Real-time synchronization solved with WebSocket
+- ✅ Privacy protection implemented with dual messaging
+- ✅ Turn validation working properly
+- ✅ Clean separation between GameController (deprecated) and WebSocketController (active)

@@ -1,3 +1,6 @@
+# Client Polling Logic
+
+```mermaid
 sequenceDiagram
     participant Client
     participant Server
@@ -37,3 +40,4 @@ sequenceDiagram
     Server-->>-Client: 200 OK (Action processed)
 
     Client->>Client: Resume polling process...
+```

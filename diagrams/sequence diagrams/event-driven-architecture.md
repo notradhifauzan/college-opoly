@@ -1,3 +1,6 @@
+# Event-Driven Architecture Sequence
+
+```mermaid
 sequenceDiagram
     autonumber
 
@@ -12,7 +15,7 @@ sequenceDiagram
     GameController->>+GameEngine: startGame(gameState)
     GameEngine->>GameEngine: Initializes players, deals cards...
     GameEngine->>ApplicationEventPublisher: publishEvent(new GameStartedEvent(...))
-    Note right of GameEngine: This creates a new GameStartedEvent object. <br/> The constructor's arguments are: <br/> 1. <b>source</b>: The GameEngine instance (`this`) <br/> 2. <b>gameId</b>: A string (e.g., "game1") <br/> 3. <b>playerCount</b>: The number of players
+    Note right of GameEngine: This creates a new GameStartedEvent object.<br/>The constructor's arguments are:<br/>1. source: The GameEngine instance (this)<br/>2. gameId: A string (e.g., "game1")<br/>3. playerCount: The number of players
     GameEngine-->>-GameController: Returns control flow
     GameController-->>-Client: HTTP 200 OK Response
 
@@ -22,3 +25,4 @@ sequenceDiagram
     GameEventListener->>+WebSocketController: broadcastGameUpdate(event.getMessage())
     Note right of GameEventListener: The event's message is "Game started with X players".
     WebSocketController-->>-Client: Sends WebSocket message to all clients
+```

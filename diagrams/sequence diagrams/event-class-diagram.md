@@ -1,3 +1,6 @@
+# Event Class Diagram
+
+```mermaid
 classDiagram
     direction LR
 
@@ -63,3 +66,4 @@ classDiagram
     GameEventListener ..> CardPlayedEvent : <<handles>>
     GameEventListener ..> TurnEndedEvent : <<handles>>
     GameEventListener ..> GameWonEvent : <<handles>>
+```

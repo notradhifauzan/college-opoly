@@ -1,3 +1,6 @@
+# WebSocket All Players Rent Flow
+
+```mermaid
 sequenceDiagram
     participant ClientA as Player A's Client
     participant ClientB as Player B's Client
@@ -80,3 +83,4 @@ sequenceDiagram
     deactivate Server
 
     Note over ClientA, ClientC: Everyone's UI is now fully up-to-date. The game turn can proceed.
+```

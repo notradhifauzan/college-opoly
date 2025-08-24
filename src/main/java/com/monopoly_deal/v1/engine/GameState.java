@@ -10,8 +10,11 @@ import lombok.Data;
 
 @Data
 public class GameState {
+    private final int MAX_MOVES_PER_TURN = 3;
+    
     private List<Player> players;
     private int currentPlayerIndex;
+    private int currentPlayerMoves;
     private Deck deck;
     private DiscardPile discardPile;
     private GamePhase currentPhase;
@@ -23,6 +26,7 @@ public class GameState {
         this.deck = deck;
         this.discardPile = new DiscardPile();
         this.currentPlayerIndex = 0;
+        this.currentPlayerMoves = 0;
         this.currentPhase = GamePhase.DRAW_PHASE;
         this.gameOver = false;
     }
