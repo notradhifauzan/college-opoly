@@ -40,6 +40,14 @@ public class GameState {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
+    public void incrementMoves() {
+        this.currentPlayerMoves += 1;
+    }
+
+    public void resetMoves() {
+        this.currentPlayerMoves = 0;
+    }
+
     public Player getPlayerByName(String name) {
         return players.stream()
                     .filter(p -> p.getName().equals(name))

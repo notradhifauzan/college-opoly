@@ -71,11 +71,17 @@ public class GameEngine {
             throw new IllegalStateException("You can only play cards during the play phase.");
         }
 
+        if(gameState.getCurrentPlayerMoves() >= gameState.getMAX_MOVES_PER_TURN()) {
+            throw new IllegalStateException("You have reached max amount of moves. ");
+        }
+
         if(!player.getHand().contains(card)) {
             throw new IllegalStateException("You don't have that card. ");
         }
 
         cardActionService.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
+
+        gameState.incrementMoves();
         
         // publish card played event
         eventPublisher.publishEvent(new CardPlayedEvent(this, "game1", player.getName(), card.getName()));
@@ -85,6 +91,7 @@ public class GameEngine {
 
     public void endTurn(GameState gameState) {
         turnManager.endTurn(gameState);
+        gameState.resetMoves();
         
         // publish turn ended event
         eventPublisher.publishEvent(new TurnEndedEvent(this, "game1", gameState.getCurrentPlayer().getName()));

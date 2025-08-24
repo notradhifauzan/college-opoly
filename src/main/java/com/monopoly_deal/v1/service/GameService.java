@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.monopoly_deal.v1.engine.GameEngine;
 import com.monopoly_deal.v1.engine.GameState;
-import com.monopoly_deal.v1.engine.TurnManager;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
@@ -17,12 +16,10 @@ public class GameService {
     
     private GameState gameState;
     private final GameEngine gameEngine;
-    private final TurnManager turnManager;
 
     @Autowired
     public GameService(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
-        this.turnManager = new TurnManager();
     }
 
     // start a new game
@@ -54,7 +51,7 @@ public class GameService {
 
     // end current player's turn
     public void endTurn() {
-        turnManager.endTurn(gameState);
+        gameEngine.endTurn(gameState);
     }
 
     // get current game state (readOnly)
