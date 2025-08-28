@@ -81,8 +81,11 @@ public class GameEngine {
         }
 
         cardActionService.playCard(gameState, player, card, request);
-
         gameState.incrementMoves();
+
+        if(!gameState.getPendingActions().isEmpty()) {
+            gameState.setCurrentPhase(GamePhase.PENDING_ACTION_PHASE);
+        }
         
         // publish card played event
         eventPublisher.publishEvent(new CardPlayedEvent(this, "game1", player.getName(), card.getName()));

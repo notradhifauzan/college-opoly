@@ -90,7 +90,7 @@ public class GameController {
             }
 
             Player currentPlayer = gameService.getCurrentPlayer();
-            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney(), request.getTargetPlayerIds());
+            gameService.playCardById(currentPlayer.getName(), request);
             
             // Return updated player state instead of simple success message
             Player updatedPlayer = gameService.getCurrentPlayer();

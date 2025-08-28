@@ -70,6 +70,11 @@ public class WebSocketController {
         }
     }
 
+    @MessageMapping("/game/respond-to-action")
+    public void respondToAction() {
+        
+    }
+
     @MessageMapping("/game/play-card")
     public void playCard(PlayCardRequest request) {
          try {
