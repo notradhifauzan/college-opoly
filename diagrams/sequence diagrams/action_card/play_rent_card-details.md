@@ -14,35 +14,35 @@ sequenceDiagram
     Title: Detailed Server-Side Sequence for Playing a Rent Card
 
     Client->>+GameController: POST /game/play-card (request)
-    
+
     GameController->>+GameService: playCardById(playerName, cardId, ...)
-    
+
     GameService->>+GameState: getPlayerByName(playerName)
     GameState-->>-GameService: return player
-    
+
     GameService->>+GameEngine: playCard(gameState, player, card, ...)
-    
+
     GameEngine->>+CardActionService: playCard(gameState, player, card, ...)
-    
+
     CardActionService->>+CardActionStrategyFactory: getStrategy(card)
     CardActionStrategyFactory-->>-CardActionService: return rentCardStrategy
-    
+
     CardActionService->>+RentCardStrategy: execute(actionContext)
     Note over RentCardStrategy: Now inside the core rent logic.
-    
+
     RentCardStrategy->>GameState: getPlayers()
     GameState-->>RentCardStrategy: return allPlayers
-    
+
     loop for each opponent
         RentCardStrategy->>RentCardStrategy: Create new PendingAction(from:player, to:opponent)
         RentCardStrategy->>+GameState: getPendingActions().add(pendingAction)
         GameState-->>-RentCardStrategy: 
     end
-    
+
     RentCardStrategy-->>-CardActionService: return
     CardActionService-->>-GameEngine: return
     GameEngine-->>-GameService: return
     GameService-->>-GameController: return
-    
+
     GameController-->>-Client: 200 OK (GameState with pending actions)
 ```
