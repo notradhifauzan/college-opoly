@@ -2,10 +2,14 @@ package com.monopoly_deal.v1.dto;
 
 import java.util.List;
 
+
 public class PlayCardRequest {
     private String cardId;
     private boolean playAsMoney;
     private List<String> targetPlayerIds;
+
+    // for sly deal
+    private String targetCardId;
 
     // Getters and setters
     public String getCardId() {
@@ -30,5 +34,13 @@ public class PlayCardRequest {
 
     public void setTargetPlayerIds(List<String> targetPlayerIds) {
         this.targetPlayerIds = targetPlayerIds;
+    }
+
+    public String getTargetCardId() {
+        return targetCardId;
+    }
+
+    public void setTargetCardId(String targetCardId) {
+        this.targetCardId = targetCardId;
     }
 }

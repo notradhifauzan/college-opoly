@@ -1,5 +1,6 @@
 package com.monopoly_deal.v1.service;
 
+import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.engine.GameState;
 import com.monopoly_deal.v1.enums.CardType;
 import com.monopoly_deal.v1.model.Card;
@@ -15,12 +16,12 @@ import java.util.List;
 public class CardActionService {
 
 
-    public void playCard(GameState gameState, Player player, Card card, boolean playAsMoney, List<String> targetPlayerIds) {
+    public void playCard(GameState gameState, Player player, Card card, PlayCardRequest request) {
         if(!player.getHand().contains(card)) {
             throw new IllegalArgumentException("Player doesn't have this card in hand");
         }
 
-        if(playAsMoney) {
+        if(request.isPlayAsMoney()) {
             if(card.getCardType() == CardType.PROPERTY) {
                 throw new IllegalArgumentException("Property cards cannot be played as money");
             }
@@ -30,7 +31,7 @@ public class CardActionService {
         }
 
         CardActionStrategy strategy = CardActionStrategyFactory.getStrategy(card.getCardType());
-        ActionContext context = new ActionContext(gameState, player, card, targetPlayerIds);
+        ActionContext context = new ActionContext(gameState, player, card, request);
         strategy.execute(context);
 
         player.getHand().removeIf(c -> c.getId().equals(card.getId()));

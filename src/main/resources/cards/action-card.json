@@ -1,0 +1,23 @@
+[
+    {
+        "id": "action-001",
+        "name": "SLY DEAL 1",
+        "cardType": "ACTION",
+        "actionType": "SLY_DEAL",
+        "value": 3
+    },
+    {
+        "id": "action-002",
+        "name": "SLY DEAL 2",
+        "cardType": "ACTION",
+        "actionType": "SLY_DEAL",
+        "value": 3
+    },
+    {
+        "id": "action-003",
+        "name": "SLY DEAL 3",
+        "cardType": "ACTION",
+        "actionType": "SLY_DEAL",
+        "value": 3
+    }
+]

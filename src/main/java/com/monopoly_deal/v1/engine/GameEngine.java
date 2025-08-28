@@ -1,5 +1,6 @@
 package com.monopoly_deal.v1.engine;
 
+import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.events.*;
 import com.monopoly_deal.v1.model.Card;
@@ -62,7 +63,7 @@ public class GameEngine {
         }
     }
 
-    public void playCard(GameState gameState, Player player, Card card, boolean playAsMoney, List<String> targetPlayerIds) {
+    public void playCard(GameState gameState, Player player, Card card, PlayCardRequest request) {
         if(!turnManager.isPlayerTurn(gameState, player)) {
             throw new IllegalStateException("It's not your turn!");
         }
@@ -79,7 +80,7 @@ public class GameEngine {
             throw new IllegalStateException("You don't have that card. ");
         }
 
-        cardActionService.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
+        cardActionService.playCard(gameState, player, card, request);
 
         gameState.incrementMoves();
         

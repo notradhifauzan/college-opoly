@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.engine.GameEngine;
 import com.monopoly_deal.v1.engine.GameState;
 import com.monopoly_deal.v1.model.Card;
@@ -39,14 +40,13 @@ public class GameService {
         gameEngine.drawCard(gameState, currPlayer, false);
     }
 
-    // play a card by ID (or bank it)
-    public void playCardById(String playerName, String cardId, boolean playAsMoney, List<String> targetPlayerIds) {
+    public void playCardById(String playerName, PlayCardRequest request) {
         Player player = gameState.getPlayerByName(playerName);
         Card card = player.getHand().stream()
-            .filter(c -> c.getId().equals(cardId))
+            .filter(c -> c.getId().equals(request.getCardId()))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Card with ID " + cardId + " not found in player's hand"));
-        gameEngine.playCard(gameState, player, card, playAsMoney, targetPlayerIds);
+            .orElseThrow(() -> new IllegalArgumentException("Card with ID " + request.getCardId() + " not found in player's hand"));
+        gameEngine.playCard(gameState, player, card, request);
     }
 
     // end current player's turn

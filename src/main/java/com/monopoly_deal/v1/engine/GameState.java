@@ -1,5 +1,6 @@
 package com.monopoly_deal.v1.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,6 +20,7 @@ public class GameState {
     private DiscardPile discardPile;
     private GamePhase currentPhase;
     private boolean gameOver;
+    private List<PendingAction> pendingActions;
 
     // constructor
     public GameState(List<Player> players, Deck deck) {
@@ -29,6 +31,7 @@ public class GameState {
         this.currentPlayerMoves = 0;
         this.currentPhase = GamePhase.DRAW_PHASE;
         this.gameOver = false;
+        this.pendingActions = new ArrayList<>();
     }
 
     // utility methods

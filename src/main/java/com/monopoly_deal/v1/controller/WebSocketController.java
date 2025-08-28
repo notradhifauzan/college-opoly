@@ -79,7 +79,7 @@ public class WebSocketController {
             }
             
             Player currentPlayer = gameService.getCurrentPlayer();
-            gameService.playCardById(currentPlayer.getName(), request.getCardId(), request.isPlayAsMoney(), request.getTargetPlayerIds());
+            gameService.playCardById(currentPlayer.getName(), request);
             
             // Also broadcast updated game state
             broadcastGameUpdate(gameService.getGameState());

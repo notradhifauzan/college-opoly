@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monopoly_deal.v1.model.ActionCard;
 import com.monopoly_deal.v1.model.Card;
+import com.monopoly_deal.v1.model.MoneyCard;
 import com.monopoly_deal.v1.model.PropertyCard;
 
 public class CardLoader {
@@ -17,6 +19,7 @@ public class CardLoader {
 
         allCards.addAll(loadPropertyCards());
         allCards.addAll(loadMoneyCards());
+        allCards.addAll(loadActionCards());
 
         return allCards;
     }
@@ -25,8 +28,12 @@ public class CardLoader {
         return readCards("/cards/property-card.json", new TypeReference<List<PropertyCard>>() {});
     }
 
-    private static <T> List<PropertyCard> loadMoneyCards() {
-        return readCards("/cards/money-card.json", new TypeReference<List<PropertyCard>>() {});
+    private static <T> List<ActionCard> loadActionCards() {
+        return readCards("/cards/action-card.json", new TypeReference<List<ActionCard>>() {});
+    }
+
+    private static <T> List<MoneyCard> loadMoneyCards() {
+        return readCards("/cards/money-card.json", new TypeReference<List<MoneyCard>>() {});
     }
 
     private static <T extends Card> List<T> readCards(String path, TypeReference<List<T>> typeRef) {
