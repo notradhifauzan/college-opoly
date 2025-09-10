@@ -49,6 +49,15 @@ public class GameService {
         gameEngine.playCard(gameState, player, card, request);
     }
 
+    public void respondToAction(String playerId, boolean accept, String pendingActionId, String counterCardId) {
+        if(accept) {
+            // if accept, need to verify if the player as the card ...
+            // hmm okay at this point, I think I need a strategy class just to handle each action. what do you think?
+        } else {
+
+        }
+    }
+
     // end current player's turn
     public void endTurn() {
         gameEngine.endTurn(gameState);

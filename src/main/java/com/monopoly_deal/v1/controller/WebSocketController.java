@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.monopoly_deal.v1.dto.PlayCardRequest;
+import com.monopoly_deal.v1.model.ActionResponse;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Deck;
 import com.monopoly_deal.v1.model.Player;
@@ -71,13 +72,26 @@ public class WebSocketController {
     }
 
     @MessageMapping("/game/respond-to-action")
-    public void respondToAction() {
-        
+    public void respondToAction(String playerId, boolean accept, String pendingActionId, String counterCardId) {
+        try {
+            if(gameService.getGameState() == null) {
+                messagingTemplate.convertAndSend("/topic/game/updates", "RESPOND_ERROR:Game not started yet");
+                return;
+            }
+            
+            // Also broadcast updated game state
+            broadcastGameUpdate(gameService.getGameState());
+        } catch (IllegalStateException e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "RESPOND_ERROR:" + e.getMessage());
+        } catch(Exception e) {
+            messagingTemplate.convertAndSend("/topic/game/updates", "RESPOND_ERROR:An error occurred while playing card");
+        }
+
     }
 
     @MessageMapping("/game/play-card")
     public void playCard(PlayCardRequest request) {
-         try {
+        try {
             if(gameService.getGameState() == null) {
                 messagingTemplate.convertAndSend("/topic/game/updates", "PLAY_ERROR:Game not started yet");
                 return;

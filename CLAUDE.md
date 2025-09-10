@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Important Development Notes
+
+**Game Architecture Decision:**
+- This application uses **WebSocket-based communication** for all game interactions
+- The `GameController` (REST API) is kept for reference but should **NOT be used** for game implementation
+- All game functionality should be implemented through the `WebSocketController` to ensure real-time synchronization across all players
+
 ## Development Commands
 
 ### Build and Run
@@ -29,10 +36,9 @@ The game uses the Strategy pattern for card actions:
 - **CardActionStrategy** implementations for different card types (Property, Action, Rent)
 - **CardActionService** coordinates with strategies to execute card plays
 
-### REST API Layer
-- **GameController** (`src/main/java/com/monopoly_deal/v1/controller/GameController.java`) - Main game endpoints
-- **PlayerController** - Player-specific operations
-- **PlayCardRequest** DTO for card play requests
+### WebSocket Communication Layer
+- **WebSocketController** (`src/main/java/com/monopoly_deal/v1/controller/WebSocketController.java`) - Handles all real-time game communication
+- **PlayCardRequest** DTO for card play requests (used in WebSocket messages)
 
 ### Data Models
 - **Card** hierarchy with specialized types (PropertyCard, MoneyCard, RentCard)
@@ -55,6 +61,27 @@ Card definitions are stored as JSON files in `src/main/resources/cards/`:
 - Turn-based gameplay with validation
 
 ### Frontend Integration
-- Static test interface at `src/main/resources/static/test.html`
-- RESTful API design for easy frontend integration
-- JSON responses with detailed game state information
+- Static test interface at `src/main/resources/static/websocket-test.html`
+- WebSocket-based communication for real-time game updates
+- All players receive synchronized game state updates
+
+## Mermaid Diagram Guidelines
+
+When creating Mermaid diagrams, use this correct syntax format:
+
+**Correct Format:**
+```mermaid
+graph TB
+    NodeA["Label Text"]
+    NodeB["Another Label"]
+    
+    NodeA -.-> |Edge Label| NodeB
+    NodeA --> NodeB
+    NodeA <-.-> |Bidirectional| NodeB
+```
+
+**Important Rules:**
+- Use double quotes for node labels: `NodeA["Label Text"]`
+- Add spaces around arrow operators: `-.-> |Label|` not `-.->|Label|`
+- Avoid HTML line breaks (`<br/>`) in labels - use hyphens instead
+- Remove comments (`%%`) if causing parsing issues

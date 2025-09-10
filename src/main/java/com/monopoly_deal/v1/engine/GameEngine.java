@@ -3,6 +3,7 @@ package com.monopoly_deal.v1.engine;
 import com.monopoly_deal.v1.dto.PlayCardRequest;
 import com.monopoly_deal.v1.enums.GamePhase;
 import com.monopoly_deal.v1.events.*;
+import com.monopoly_deal.v1.model.ActionResponse;
 import com.monopoly_deal.v1.model.Card;
 import com.monopoly_deal.v1.model.Player;
 import com.monopoly_deal.v1.model.PropertySet;
@@ -10,8 +11,6 @@ import com.monopoly_deal.v1.service.CardActionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class GameEngine {
@@ -91,6 +90,10 @@ public class GameEngine {
         eventPublisher.publishEvent(new CardPlayedEvent(this, "game1", player.getName(), card.getName()));
         
         checkWinCondition(gameState);
+    }
+
+    public void respondToAction(ActionResponse ar) {
+        
     }
 
     public void endTurn(GameState gameState) {
